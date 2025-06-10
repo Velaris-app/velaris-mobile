@@ -1,94 +1,78 @@
 package com.investrove.ui.feature.settings
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.airbnb.lottie.compose.*
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-@ExperimentalMaterial3Api
-fun SettingsScreen(
-    isDarkTheme: Boolean,
-    onThemeChange: (Boolean) -> Unit
-) {
-    var showThemeAnimation by remember { mutableStateOf(false) }
-    var animationAsset by remember { mutableStateOf("") }
-    var animationJob by remember { mutableStateOf<Job?>(null) }
+fun SettingsScreen(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
+    var isAnimating by remember { mutableStateOf(false) }
+    val transition = updateTransition(isDarkTheme, label = "theme")
 
-    val scope = rememberCoroutineScope()
-
-    val composition by rememberLottieComposition(
-        if (animationAsset.isNotEmpty()) LottieCompositionSpec.Asset(animationAsset) else LottieCompositionSpec.RawRes(0)
-    )
-    val progress by animateLottieCompositionAsState(
-        composition,
-        isPlaying = showThemeAnimation,
-        iterations = 1,
-        speed = 1.5f,
-        restartOnPlay = true
-    )
-
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Settings") })
-        }
-    ) { padding ->
-        Box(modifier = Modifier
-            .padding(padding)
-            .fillMaxSize()
+    Scaffold(topBar = { TopAppBar(title = { Text("Settings") }) }) { padding ->
+        Column(
+                modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+            Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Text("Settings")
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = "Appearance", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Dark Theme")
-                    Switch(
-                        checked = isDarkTheme,
-                        onCheckedChange = { newValue ->
-                            animationAsset = if (newValue) "dark_mode.json" else "light_mode.json"
-                            showThemeAnimation = true
-                            onThemeChange(newValue)
+                    Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "Dark Theme", style = MaterialTheme.typography.bodyLarge)
 
-                            animationJob?.cancel()
-                            animationJob = scope.launch {
-                                delay(2000)
-                                showThemeAnimation = false
-                                animationJob = null
-                            }
-                        }
-                    )
-                }
-            }
-
-            if (showThemeAnimation && composition != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Transparent),
-                    contentAlignment = Alignment.Center
-                ) {
-                    LottieAnimation(
-                        composition = composition,
-                        progress = { progress },
-                        modifier = Modifier.fillMaxWidth().height(400.dp)
-                    )
+                        Switch(
+                                checked = isDarkTheme,
+                                onCheckedChange = { newValue ->
+                                    if (!isAnimating) {
+                                        isAnimating = true
+                                        onThemeChange(newValue)
+                                        // Reset animation state after a short delay
+                                        kotlinx.coroutines.MainScope().launch {
+                                            kotlinx.coroutines.delay(300)
+                                            isAnimating = false
+                                        }
+                                    }
+                                },
+                                thumbContent = {
+                                    AnimatedContent(
+                                            targetState = isDarkTheme,
+                                            transitionSpec = {
+                                                fadeIn(animationSpec = tween(300)) with
+                                                        fadeOut(animationSpec = tween(300))
+                                            },
+                                            label = "theme_icon"
+                                    ) { isDark ->
+                                        Icon(
+                                                imageVector =
+                                                        if (isDark) Icons.Default.DarkMode
+                                                        else Icons.Default.LightMode,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SwitchDefaults.IconSize)
+                                        )
+                                    }
+                                }
+                        )
+                    }
                 }
             }
         }
