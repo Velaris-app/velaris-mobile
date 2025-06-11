@@ -38,4 +38,4 @@ data class InvestmentPerformance(
     val purchaseValue: Double,
     val currentValue: Double,
     val returnPercentage: Double
-) 
+)

@@ -15,8 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class InsightsState(
-        val selectedDateRange: DateRange =
-                DateRange(start = LocalDate.now().minusMonths(1), end = LocalDate.now()),
+        val selectedDateRange: DateRange = DateRange(start = LocalDate.now().minusMonths(1), end = LocalDate.now()),
         val selectedCategories: Set<String> = emptySet(),
         val portfolioStats: PortfolioStats = PortfolioStats(),
         val isLoading: Boolean = false,

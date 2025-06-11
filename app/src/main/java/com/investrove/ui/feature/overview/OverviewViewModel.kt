@@ -48,10 +48,6 @@ constructor(
         loadOverviewData()
     }
 
-    fun refresh() {
-        loadOverviewData()
-    }
-
     private fun loadOverviewData() {
         viewModelScope.launch {
             try {

@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.investrove.ui.feature.insights.components.*
 import com.investrove.ui.feature.insights.components.cards.InvestmentTypeComparison
 import com.investrove.ui.feature.insights.components.cards.PerformanceMetricsCard
 import com.investrove.ui.feature.insights.components.cards.TopPerformersCard

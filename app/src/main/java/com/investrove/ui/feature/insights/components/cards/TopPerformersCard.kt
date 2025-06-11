@@ -7,26 +7,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.investrove.data.model.*
+import com.investrove.ui.common.SectionCard
 
 @Composable
 fun TopPerformersCard(
     topPerformers: List<InvestmentPerformance>,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
+    SectionCard(
+        title = "Najlepsze inwestycje",
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Text(
-                text = "Najlepsze inwestycje",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
             if (topPerformers.isNotEmpty()) {
                 topPerformers.forEach { performer ->
                     Row(

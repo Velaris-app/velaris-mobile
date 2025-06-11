@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.investrove.data.model.CategoryStats
+import com.investrove.ui.common.SectionCard
 import kotlin.math.roundToInt
 
 @Composable
@@ -14,20 +15,15 @@ fun CategoryDistributionChart(
     categoryDistribution: Map<String, CategoryStats>,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
+    SectionCard(
+        title = "Rozkład kategorii",
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Text(
-                text = "Rozkład kategorii",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
             if (categoryDistribution.isNotEmpty()) {
                 val totalValue = categoryDistribution.values.sumOf { it.totalValue }
                 categoryDistribution.forEach { (category, stats) ->
