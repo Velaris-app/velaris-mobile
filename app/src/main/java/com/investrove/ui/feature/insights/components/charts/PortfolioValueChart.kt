@@ -6,13 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.investrove.data.model.HistoricalDataPoint
+import com.investrove.data.model.ValuePoint
 import com.investrove.ui.common.SectionCard
 import com.investrove.ui.common.charts.Chart
 
 @Composable
 fun PortfolioValueChart(
-    historicalData: List<HistoricalDataPoint>,
+    historicalData: List<ValuePoint>,
     modifier: Modifier = Modifier
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
@@ -36,8 +36,8 @@ fun PortfolioValueChart(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val minValue = historicalData.minOf { it.value }
-                    val maxValue = historicalData.maxOf { it.value }
+                    val minValue = historicalData.minOf { it.totalValue.toDouble() }
+                    val maxValue = historicalData.maxOf { it.totalValue.toDouble() }
 
                     Text(
                         text = "%.2f zł".format(minValue),

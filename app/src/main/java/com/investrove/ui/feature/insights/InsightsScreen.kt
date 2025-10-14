@@ -10,8 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.investrove.ui.feature.insights.components.cards.InvestmentTypeComparison
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.investrove.ui.feature.insights.components.cards.PerformanceMetricsCard
 import com.investrove.ui.feature.insights.components.cards.TopPerformersCard
 import com.investrove.ui.feature.insights.components.charts.CategoryDistributionChart
@@ -95,10 +94,10 @@ fun InsightsScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    InvestmentTypeComparison(
-                        investmentTypeDistribution = state.portfolioStats.investmentTypeDistribution,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+//                    InvestmentTypeComparison(
+//                        investmentTypeDistribution = state.portfolioStats.investmentTypeDistribution,
+//                        modifier = Modifier.fillMaxWidth()
+//                    )
 
                     TopPerformersCard(
                         topPerformers = state.portfolioStats.topPerformers,

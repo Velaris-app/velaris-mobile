@@ -16,79 +16,79 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.investrove.ui.navigation.Routes
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PortfolioScreen(navController: NavController, viewModel: PortfolioViewModel) {
-    val state = viewModel.state.collectAsState().value
-
-    LaunchedEffect(Unit) { viewModel.refreshPortfolio() }
-
-    Scaffold(
-            topBar = {
-                TopAppBar(
-                        title = { Text("InvesTrove - Portfolio") },
-                        actions = {
-                            IconButton(onClick = { viewModel.refreshPortfolio() }) {
-                                Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-                            }
-                        }
-                )
-            },
-            floatingActionButton = {
-                FloatingActionButton(onClick = { navController.navigate(Routes.AddItem) }) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Investment")
-                }
-            }
-    ) { padding ->
-        when {
-            state.isLoading -> {
-                Box(
-                        modifier = Modifier.fillMaxSize().padding(padding),
-                        contentAlignment = Alignment.Center
-                ) { CircularProgressIndicator() }
-            }
-            state.error != null -> {
-                Box(
-                        modifier = Modifier.fillMaxSize().padding(padding),
-                        contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                    ) {
-                        Text("Error: ${state.error}")
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(onClick = { viewModel.refreshPortfolio() }) { Text("Retry") }
-                    }
-                }
-            }
-            state.items.isEmpty() -> {
-                Box(
-                        modifier = Modifier.fillMaxSize().padding(padding),
-                        contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                    ) {
-                        Text("No investments yet")
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(onClick = { navController.navigate(Routes.AddItem) }) {
-                            Text("Add Your First Investment")
-                        }
-                    }
-                }
-            }
-            else -> {
-                LazyColumn(
-                        modifier = Modifier.padding(padding),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(state.items) { item ->
-                        PortfolioItemCard(item = item, onClick = { /* TODO: Navigate to details */})
-                    }
-                }
-            }
-        }
-    }
-}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun PortfolioScreen(navController: NavController, viewModel: PortfolioViewModel) {
+//    val state = viewModel.state.collectAsState().value
+//
+//    LaunchedEffect(Unit) { viewModel.refreshPortfolio() }
+//
+//    Scaffold(
+//            topBar = {
+//                TopAppBar(
+//                        title = { Text("InvesTrove - Portfolio") },
+//                        actions = {
+//                            IconButton(onClick = { viewModel.refreshPortfolio() }) {
+//                                Icon(Icons.Default.Refresh, contentDescription = "Refresh")
+//                            }
+//                        }
+//                )
+//            },
+//            floatingActionButton = {
+//                FloatingActionButton(onClick = { navController.navigate(Routes.ADDITEM) }) {
+//                    Icon(Icons.Default.Add, contentDescription = "Add Investment")
+//                }
+//            }
+//    ) { padding ->
+//        when {
+//            state.isLoading -> {
+//                Box(
+//                        modifier = Modifier.fillMaxSize().padding(padding),
+//                        contentAlignment = Alignment.Center
+//                ) { CircularProgressIndicator() }
+//            }
+//            state.error != null -> {
+//                Box(
+//                        modifier = Modifier.fillMaxSize().padding(padding),
+//                        contentAlignment = Alignment.Center
+//                ) {
+//                    Column(
+//                            horizontalAlignment = Alignment.CenterHorizontally,
+//                            verticalArrangement = Arrangement.Center
+//                    ) {
+//                        Text("Error: ${state.error}")
+//                        Spacer(modifier = Modifier.height(16.dp))
+//                        Button(onClick = { viewModel.refreshPortfolio() }) { Text("Retry") }
+//                    }
+//                }
+//            }
+//            state.items.isEmpty() -> {
+//                Box(
+//                        modifier = Modifier.fillMaxSize().padding(padding),
+//                        contentAlignment = Alignment.Center
+//                ) {
+//                    Column(
+//                            horizontalAlignment = Alignment.CenterHorizontally,
+//                            verticalArrangement = Arrangement.Center
+//                    ) {
+//                        Text("No investments yet")
+//                        Spacer(modifier = Modifier.height(16.dp))
+//                        Button(onClick = { navController.navigate(Routes.ADDITEM) }) {
+//                            Text("Add Your First Investment")
+//                        }
+//                    }
+//                }
+//            }
+//            else -> {
+//                LazyColumn(
+//                        modifier = Modifier.padding(padding),
+//                        verticalArrangement = Arrangement.spacedBy(8.dp)
+//                ) {
+//                    items(state.items) { item ->
+//                        PortfolioItemCard(item = item, onClick = { /* TODO: Navigate to details */})
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}

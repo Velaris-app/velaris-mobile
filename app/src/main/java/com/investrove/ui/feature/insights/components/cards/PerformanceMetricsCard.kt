@@ -9,7 +9,7 @@ import com.investrove.ui.common.SectionCard
 
 @Composable
 fun PerformanceMetricsCard(
-    portfolioStats: PortfolioStats,
+    portfolioStats: PortfolioStatsDto,
     modifier: Modifier = Modifier
 ) {
 
@@ -28,11 +28,11 @@ fun PerformanceMetricsCard(
             ) {
                 MetricItem(
                     label = "Całkowity zwrot",
-                    value = "%.2f%%".format(portfolioStats.totalReturn)
+                    value = "%.2f%%".format(portfolioStats.avgReturnPercentage)
                 )
                 MetricItem(
-                    label = "Miesięczny zwrot",
-                    value = "%.2f%%".format(portfolioStats.monthlyReturn)
+                    label = "Całkowity zysk",
+                    value = "%.2f".format(portfolioStats.totalGain)
                 )
             }
         }

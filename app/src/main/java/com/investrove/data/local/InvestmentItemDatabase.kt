@@ -8,5 +8,6 @@ import com.investrove.data.model.InvestmentItem
 @Database(entities = [InvestmentItem::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class InvestmentItemDatabase : RoomDatabase() {
-    abstract fun collectibleDao(): InvestmentItemDao
+    abstract fun investmentItemDao(): InvestmentItemDao
+    abstract fun investmentStatsDao(): InvestmentStatsDao
 }

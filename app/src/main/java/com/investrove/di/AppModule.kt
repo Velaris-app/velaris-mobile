@@ -3,7 +3,7 @@ import android.content.Context
 import androidx.room.Room
 import com.investrove.data.local.InvestmentItemDao
 import com.investrove.data.local.InvestmentItemDatabase
-import com.investrove.data.repository.InvestmentItemRepository
+import com.investrove.data.local.InvestmentStatsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,8 +28,8 @@ object AppModule {
     }
 
     @Provides
-    fun provideDao(db: InvestmentItemDatabase): InvestmentItemDao = db.collectibleDao()
+    fun provideInvestmentItemDao(db: InvestmentItemDatabase): InvestmentItemDao = db.investmentItemDao()
 
     @Provides
-    fun provideRepository(dao: InvestmentItemDao): InvestmentItemRepository = InvestmentItemRepository(dao)
+    fun provideInvestmentStatsDao(db: InvestmentItemDatabase): InvestmentStatsDao = db.investmentStatsDao()
 }

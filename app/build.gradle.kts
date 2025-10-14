@@ -6,11 +6,12 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-kapt")
     alias(libs.plugins.dagger.hilt.android)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
 }
 
 android {
     namespace = "com.investrove"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.investrove"
@@ -31,12 +32,19 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
         jvmTarget = "21"
+    }
+
+    packaging {
+        resources {
+            excludes += "META-INF/**"
+        }
     }
 }
 
@@ -72,9 +80,6 @@ dependencies {
     implementation(libs.jetbrains.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    // Gson
-    implementation(libs.gson)
-
     // Hilt (DI)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -95,8 +100,23 @@ dependencies {
     // Animation
     implementation (libs.android.lottie.compose)
 
+    // Api
+    implementation (libs.velaris.api.client)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Retrofit
+    implementation(libs.retrofit)
+
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    implementation (libs.coil.compose)
 }

@@ -1,8 +1,7 @@
 package com.investrove.ui.feature.settings
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.*
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
@@ -12,23 +11,36 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.investrove.ui.common.SectionCard
+import com.investrove.ui.feature.auth.SessionViewModel
+import com.investrove.ui.navigation.Routes
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
+fun SettingsScreen(
+    isDarkTheme: Boolean,
+    onThemeChange: (Boolean) -> Unit,
+    navController: NavController
+) {
+    val sessionViewModel: SessionViewModel = hiltViewModel()
     var isAnimating by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Settings") }) }) { padding ->
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Settings") }) }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // === Appearance Section ===
             SectionCard(title = "Appearance") {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -53,22 +65,38 @@ fun SettingsScreen(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
                             AnimatedContent(
                                 targetState = isDarkTheme,
                                 transitionSpec = {
-                                    fadeIn(animationSpec = tween(300)).togetherWith(
-                                        fadeOut(animationSpec = tween(300))
-                                    )
+                                    fadeIn(animationSpec = tween(300)) togetherWith
+                                            fadeOut(animationSpec = tween(300))
                                 },
                                 label = "theme_icon"
                             ) { isDark ->
                                 Icon(
-                                    imageVector =
-                                        if (isDark) Icons.Default.DarkMode
-                                        else Icons.Default.LightMode,
+                                    imageVector = if (isDark) Icons.Default.DarkMode else Icons.Default.LightMode,
                                     contentDescription = null,
                                     modifier = Modifier.size(SwitchDefaults.IconSize)
                                 )
                             }
                         }
                     )
+                }
+            }
+
+            // === Logout Section ===
+            SectionCard(title = "Account") {
+                Button(
+                    onClick = {
+                        sessionViewModel.logout()
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                ) {
+                    Text("Logout")
                 }
             }
         }

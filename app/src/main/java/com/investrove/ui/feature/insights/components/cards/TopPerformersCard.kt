@@ -11,7 +11,7 @@ import com.investrove.ui.common.SectionCard
 
 @Composable
 fun TopPerformersCard(
-    topPerformers: List<InvestmentPerformance>,
+    topPerformers: List<TopPerformer>,
     modifier: Modifier = Modifier
 ) {
     SectionCard(
@@ -37,20 +37,20 @@ fun TopPerformersCard(
                                 text = performer.name,
                                 style = MaterialTheme.typography.bodyMedium
                             )
-                            Text(
-                                text = performer.category,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+//                            Text(
+//                                text = performer.category,
+//                                style = MaterialTheme.typography.bodySmall,
+//                                color = MaterialTheme.colorScheme.onSurfaceVariant
+//                            )
                         }
-                        Text(
-                            text = "%.2f%%".format(performer.returnPercentage),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (performer.returnPercentage >= 0)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.error
-                        )
+//                        Text(
+//                            text = "%.2f%%".format(performer.returnPercentage),
+//                            style = MaterialTheme.typography.bodyMedium,
+//                            color = if (performer.returnPercentage >= 0)
+//                                MaterialTheme.colorScheme.primary
+//                            else
+//                                MaterialTheme.colorScheme.error
+//                        )
                     }
                 }
             } else {

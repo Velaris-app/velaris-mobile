@@ -11,5 +11,10 @@ class InvestmentItemRepository @Inject constructor(
 ) {
 
     suspend fun getAllCollectibles(): List<InvestmentItem> = dao.getAllCollectibles()
+
     suspend fun insert(item: InvestmentItem) = dao.insert(item)
+
+    suspend fun delete(item: InvestmentItem) = dao.delete(item)
+
+    suspend fun update(item: InvestmentItem) = dao.update(item)
 }

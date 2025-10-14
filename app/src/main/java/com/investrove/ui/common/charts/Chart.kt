@@ -9,18 +9,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import com.investrove.data.model.HistoricalDataPoint
+import com.investrove.data.model.ValuePoint
 
 @Composable
 fun Chart(
-    historicalData: List<HistoricalDataPoint>,
+    historicalData: List<ValuePoint>,
     lineColor: Color,
     modifier: Modifier = Modifier
 ) {
     if (historicalData.size <= 1) return
 
-    val maxValue = historicalData.maxOf { it.value }.toFloat()
-    val minValue = historicalData.minOf { it.value }.toFloat()
+    val maxValue = historicalData.maxOf { it.totalValue }.toFloat()
+    val minValue = historicalData.minOf { it.totalValue }.toFloat()
     val valueRange = (maxValue - minValue).takeIf { it != 0f } ?: 1f
 
     Canvas(
@@ -47,7 +47,7 @@ fun Chart(
         // Line path
         historicalData.forEachIndexed { index, point ->
             val x = (index.toFloat() / (historicalData.size - 1)) * width
-            val y = height - ((point.value.toFloat() - minValue) / valueRange * height)
+            val y = height - ((point.totalValue.toFloat() - minValue) / valueRange * height)
             if (index == 0) {
                 path.moveTo(x, y)
             } else {

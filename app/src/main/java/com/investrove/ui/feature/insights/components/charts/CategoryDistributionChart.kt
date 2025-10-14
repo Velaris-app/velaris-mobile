@@ -6,13 +6,13 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.investrove.data.model.CategoryStats
+import com.investrove.data.model.CategoryValue
 import com.investrove.ui.common.SectionCard
 import kotlin.math.roundToInt
 
 @Composable
 fun CategoryDistributionChart(
-    categoryDistribution: Map<String, CategoryStats>,
+    categoryDistribution: List<CategoryValue>,
     modifier: Modifier = Modifier
 ) {
     SectionCard(
@@ -25,19 +25,19 @@ fun CategoryDistributionChart(
                 .fillMaxWidth()
         ) {
             if (categoryDistribution.isNotEmpty()) {
-                val totalValue = categoryDistribution.values.sumOf { it.totalValue }
-                categoryDistribution.forEach { (category, stats) ->
-                    val percentage = ((stats.totalValue / totalValue) * 100).roundToInt()
+                val totalValue = categoryDistribution.sumOf { it.totalValue }
+                categoryDistribution.forEach { categoryValue ->
+                    val percentage = ((categoryValue.totalValue / totalValue) * 100).roundToInt()
                     Column(modifier = Modifier.padding(vertical = 4.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(category)
+                            Text(categoryValue.category)
                             Text("$percentage%")
                         }
                         LinearProgressIndicator(
-                            progress = { (stats.totalValue / totalValue).toFloat() },
+                            progress = (categoryValue.totalValue / totalValue).toFloat(),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(8.dp)

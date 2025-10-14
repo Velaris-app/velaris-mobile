@@ -12,9 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.investrove.ui.navigation.AppNavHost
 import com.investrove.ui.navigation.BottomBarNavigation
+import com.investrove.ui.navigation.Routes
 import com.investrove.ui.theme.InvesTroveTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,9 +37,25 @@ fun InvesTroveApp() {
     val navController = rememberNavController()
     var darkTheme by remember { mutableStateOf(false) }
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val bottomBarRoutes = listOf(
+        Routes.OVERVIEW,
+        Routes.ASSETS,
+        Routes.INSIGHTS,
+        Routes.SETTINGS,
+        Routes.ADD_ASSET
+    )
+    val showBottomBar = currentRoute in bottomBarRoutes
+
     InvesTroveTheme(darkTheme = darkTheme) {
         Scaffold(
-            bottomBar = { BottomBarNavigation(navController) }
+            bottomBar = {
+                if (showBottomBar) {
+                    BottomBarNavigation(navController)
+                }
+            }
         ) { padding ->
             AppNavHost(
                 navController = navController,

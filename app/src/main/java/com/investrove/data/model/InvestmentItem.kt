@@ -13,11 +13,18 @@ data class InvestmentItem(
 
     val name: String,
     val category: String,
-    val emotionalValue: Int,
-    val purchasePrice: Double?,
-    val currentValue: Double?,
-    val acquisitionDate: LocalDate?,
-    val location: String?,
+    val investmentType: String? = null,
+
+    val emotionalValue: Int = 0,
+
+    val purchasePrice: Double? = null,
+    val currentValue: Double? = null,
+    val acquisitionDate: LocalDate? = null,
+
+    val location: String? = null,
     val currency: String = "PLN",
-    val imageUri: String? = null
+    val imageUri: String? = null,
+
+    val notes: String? = null,
+    val condition: String? = null
 )
