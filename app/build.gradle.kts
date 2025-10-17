@@ -6,15 +6,15 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-kapt")
     alias(libs.plugins.dagger.hilt.android)
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
 
 android {
-    namespace = "com.investrove"
+    namespace = "com.velaris.mobile"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.investrove"
+        applicationId = "com.velaris.mobile"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -109,14 +109,16 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Retrofit
-    implementation(libs.retrofit)
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     // OkHttp
     implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp.logging.interceptor)
 
+    // Serialization
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
+    // Coil for image loading
     implementation (libs.coil.compose)
 }

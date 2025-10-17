@@ -28,7 +28,7 @@ retrofit2KotlinxSerializationConverter = "1.0.0"
 roomCompiler = "2.8.2"
 roomRuntime = "2.8.2"
 roomKtx = "2.8.2"
-velarisApiClient = "0.0.11"
+velarisApiClient = "0.0.17"
 
 [libraries]
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPagerIndicators" }
@@ -62,10 +62,10 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "jetbrainsKotlinxCoroutinesCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 play-services-nearby = { module = "com.google.android.gms:play-services-nearby", version.ref = "playServicesNearby" }
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
+retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 velaris-api-client = { module = "com.velaris.api:velaris-api-client", version.ref = "velarisApiClient" }
 

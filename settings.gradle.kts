@@ -28,6 +28,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "InvesTrove"
+rootProject.name = "Velaris"
 include(":app")
  
