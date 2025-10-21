@@ -29,6 +29,7 @@ roomCompiler = "2.8.2"
 roomRuntime = "2.8.2"
 roomKtx = "2.8.2"
 velarisApiClient = "0.0.17"
+ycharts = "2.1.0"
 
 [libraries]
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPagerIndicators" }
@@ -68,6 +69,7 @@ play-services-nearby = { module = "com.google.android.gms:play-services-nearby",
 retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 velaris-api-client = { module = "com.velaris.api:velaris-api-client", version.ref = "velarisApiClient" }
+ycharts = { module = "co.yml:ycharts", version.ref = "ycharts" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

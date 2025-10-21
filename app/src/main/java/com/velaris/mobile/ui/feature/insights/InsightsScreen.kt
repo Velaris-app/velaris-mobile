@@ -13,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.velaris.mobile.ui.common.CompactTopBar
+import com.velaris.mobile.ui.feature.common.stats.cards.PerformanceChartCard
 import com.velaris.mobile.ui.feature.insights.components.cards.CategoryDistributionCard
 import com.velaris.mobile.ui.feature.insights.components.cards.CategoryTrendCard
 import com.velaris.mobile.ui.feature.insights.components.cards.PerformanceMetricsCard
-import com.velaris.mobile.ui.feature.insights.components.cards.PortfolioValueChartCard
 import com.velaris.mobile.ui.feature.insights.components.cards.TagsStatsCard
 import com.velaris.mobile.ui.feature.insights.components.cards.TopPerformersCard
 import com.velaris.mobile.ui.feature.insights.components.cards.TrendDiffCard
@@ -80,7 +80,7 @@ fun InsightsScreen(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    PortfolioValueChartCard(historicalData = state.trendStats)
+                    PerformanceChartCard(performanceData = state.trendStats)
                     CategoryDistributionCard(categoryDistribution = state.categoryStats)
                     PerformanceMetricsCard(overview = state.overviewStats)
                     TopPerformersCard(topPerformers = state.topMoversStats)

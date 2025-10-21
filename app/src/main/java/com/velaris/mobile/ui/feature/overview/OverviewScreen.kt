@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.velaris.mobile.ui.common.CompactTopBar
+import com.velaris.mobile.ui.feature.common.stats.cards.PerformanceChartCard
 import com.velaris.mobile.ui.feature.overview.components.cards.InvestmentCategoriesCard
-import com.velaris.mobile.ui.feature.overview.components.cards.PerformanceChartCard
 import com.velaris.mobile.ui.feature.overview.components.cards.PortfolioDistributionCard
 import com.velaris.mobile.ui.feature.overview.components.cards.RecentActivityCard
 import com.velaris.mobile.ui.feature.overview.components.cards.TotalValueCard
