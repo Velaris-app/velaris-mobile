@@ -35,6 +35,8 @@ fun LineChart(
     strokeWidth: Float = 4f,
     showAxes: Boolean = true,
     gridSteps: Int = 4,
+    xLabels: List<String>? = null,
+    yLabels: List<String>? = null
 ) {
     if (points.isEmpty()) return
 
@@ -43,26 +45,22 @@ fun LineChart(
     val textColor = MaterialTheme.colorScheme.onSurfaceVariant
     val textMeasurer = rememberTextMeasurer()
 
-    // Normalizacja Y
     val minY = points.minOf { it.y }
     val maxY = points.maxOf { it.y }
     val rangeY = (maxY - minY).takeIf { it != 0f } ?: 1f
     val normalizedPoints = points.map { ChartPoint(it.x, (it.y - minY) / rangeY) }
 
-    // X range
     val minX = normalizedPoints.minOf { it.x }
     val maxX = normalizedPoints.maxOf { it.x }
     val rangeX = (maxX - minX).takeIf { it > 0f } ?: 1f
 
-    // Animacja rysowania
     var progress by remember { mutableFloatStateOf(0f) }
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
-        animationSpec = tween(durationMillis = 1500, delayMillis = 300)
+        animationSpec = tween(1500, 300)
     )
     LaunchedEffect(Unit) { progress = 1f }
 
-    // Interaktywny stan
     var selectedPointIndex by remember { mutableStateOf<Int?>(null) }
     var scaleX by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
@@ -100,17 +98,18 @@ fun LineChart(
             colors = listOf(lineColor.copy(alpha = 0.4f), lineColor.copy(alpha = 0.05f))
         )
 
-        // Draw axes
         if (showAxes) {
             drawAxesAndGrid(
                 leftPadding, chartHeight, chartWidth,
                 axisColor, gridSteps, minY, maxY,
-                points.map { it.x.toInt().toString() },
-                textColor, textMeasurer
+                xLabels ?: points.map { it.x.toInt().toString() },
+                yLabels,
+                textColor, textMeasurer,
+                scaleX = scaleX,
+                offsetX = offsetX
             )
         }
 
-        // Paths
         val linePath = Path()
         val fillPath = Path()
         normalizedPoints.forEachIndexed { i, p ->
@@ -132,30 +131,40 @@ fun LineChart(
 
         val clipRect = Rect(leftPadding, 0f, width, chartHeight)
         clipPath(Path().apply { addRect(clipRect) }) {
-            drawPath(linePath, color = lineColor, style = Stroke(width = strokeWidth, cap = StrokeCap.Round, join = StrokeJoin.Round))
+            drawPath(
+                linePath,
+                color = lineColor,
+                style = Stroke(
+                    width = strokeWidth,
+                    cap = StrokeCap.Round,
+                    join = StrokeJoin.Round
+                )
+            )
             fillPath.lineTo(width, chartHeight)
             fillPath.lineTo(leftPadding, chartHeight)
             fillPath.close()
             drawPath(fillPath, brush = gradient)
         }
 
-        // Selected point
         selectedPointIndex?.let { index ->
             val p = normalizedPoints[index]
             val x = leftPadding + ((p.x - minX) / rangeX) * chartWidth * scaleX + offsetX
             val y = chartHeight - (p.y * chartHeight)
             drawCircle(color = lineColor, radius = 6f, center = Offset(x, y))
-
-            val tooltipText = "x=${points[index].x}, y=${points[index].y}"
+            val tooltipText = "x=${xLabels?.get(index) ?: points[index].x}, y=${points[index].y}"
             val textWidth = 100f
             val textHeight = 20f
             val textPadding = 8f
+
+            val clampedTooltipX = (x + textPadding).coerceIn(0f, width - textWidth)
+            val clampedTooltipY = (y - textHeight - textPadding).coerceIn(0f, height - textHeight)
             drawText(
                 textMeasurer,
                 tooltipText,
-                topLeft = Offset((x + textPadding).coerceIn(0f, width - textWidth), (y - textHeight - textPadding).coerceIn(0f, height - textHeight)),
+                topLeft = Offset(clampedTooltipX, clampedTooltipY),
                 style = TextStyle(color = textColor, fontSize = 12.sp)
             )
+
         }
     }
 }
@@ -169,31 +178,55 @@ fun DrawScope.drawAxesAndGrid(
     minY: Float,
     maxY: Float,
     xLabels: List<String>,
+    yLabels: List<String>? = null,
     textColor: Color,
-    textMeasurer: TextMeasurer
+    textMeasurer: TextMeasurer,
+    scaleX: Float = 1f,
+    offsetX: Float = 0f
 ) {
     val textStyle = TextStyle(color = textColor, fontSize = 10.sp, textAlign = TextAlign.Center)
     val xAxisY = chartHeight
 
-    // Y axis
+    // Y-axis
     drawLine(axisColor, Offset(leftPadding, 0f), Offset(leftPadding, chartHeight), 1.5f)
-    // X axis
+    // X-axis
     drawLine(axisColor, Offset(leftPadding, xAxisY), Offset(leftPadding + chartWidth, xAxisY), 1.5f)
 
     // Y grid + labels
     for (i in 0..gridSteps) {
         val ratio = i / gridSteps.toFloat()
         val y = chartHeight - ratio * chartHeight
-        val value = minY + (maxY - minY) * ratio
+        val value = yLabels?.getOrNull(i) ?: String.format("%.1f", minY + (maxY - minY) * ratio)
         drawLine(axisColor.copy(alpha = 0.3f), Offset(leftPadding, y), Offset(leftPadding + chartWidth, y), 1f)
-        drawText(textMeasurer, String.format("%.1f", value), Offset(leftPadding - 70f, y - 6f), textStyle)
+        val clampedX = (leftPadding - 70f).coerceAtLeast(0f)
+        val clampedY = (y - 6f).coerceIn(0f, chartHeight)
+        drawText(textMeasurer, value, Offset(clampedX, clampedY), textStyle)
     }
 
-    // X ticks + labels
+    // X ticks + labels z paddingiem i zoomem
+    val totalLabels = xLabels.size
+    val step = chartWidth / (totalLabels - 1)
+    val verticalPadding = 40f
+
+    val minLabelSpacingPx = 8f // minimalna odległość między labelkami w px
+    var lastLabelRight = Float.NEGATIVE_INFINITY
+
     xLabels.forEachIndexed { i, label ->
-        val x = leftPadding + (i / (xLabels.size - 1).toFloat()) * chartWidth
+        val x = leftPadding + step * i * scaleX + offsetX
+        val textWidth = textMeasurer.measure(label, style = textStyle).size.width.toFloat()
+        val halfWidth = textWidth / 2f
+
+        if (x - halfWidth < lastLabelRight + minLabelSpacingPx || x + halfWidth > leftPadding + chartWidth) {
+            return@forEachIndexed
+        }
+
         drawLine(axisColor, Offset(x, xAxisY - 4f), Offset(x, xAxisY + 4f), 1.2f)
-        drawText(textMeasurer, label, Offset(x - 10f, xAxisY + 20f), textStyle)
+
+        val clampedX = (x - halfWidth).coerceIn(leftPadding, leftPadding + chartWidth - textWidth)
+        val clampedY = (xAxisY + verticalPadding).coerceIn(0f, chartHeight)
+        drawText(textMeasurer, label, Offset(clampedX, clampedY), textStyle)
+
+        lastLabelRight = clampedX + textWidth
     }
 }
 
