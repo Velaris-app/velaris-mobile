@@ -14,13 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.velaris.mobile.ui.common.CompactTopBar
+import com.velaris.mobile.ui.common.SearchableDropdownMenu
 import com.velaris.mobile.ui.common.SectionCard
 import com.velaris.mobile.ui.feature.auth.SessionViewModel
 import com.velaris.mobile.ui.navigation.Routes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Currency
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     isDarkTheme: Boolean,
@@ -80,6 +81,21 @@ fun SettingsScreen(
                         }
                     )
                 }
+            }
+
+            SectionCard(title = "Currency") {
+                val selectedCurrency by sessionViewModel.userCurrency.collectAsState()
+                val currencyOptions: List<String> = Currency.getAvailableCurrencies()
+                    .map { it.currencyCode }
+                    .sorted()
+
+                SearchableDropdownMenu(
+                    options = currencyOptions,
+                    selectedOption = selectedCurrency,
+                    onOptionSelected = { currency ->
+                        sessionViewModel.updateCurrency(currency)
+                    }
+                )
             }
 
             SectionCard(title = "Account") {

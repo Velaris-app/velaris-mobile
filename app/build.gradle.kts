@@ -49,12 +49,17 @@ android {
 }
 
 dependencies {
+    // -----------------------
     // AndroidX Core & Lifecycle
+    // -----------------------
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.core.splashscreen)
 
-    // Compose
+    // -----------------------
+    // Jetpack Compose
+    // -----------------------
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -63,64 +68,70 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.ycharts)
 
-
     // Icons
     implementation(libs.androidx.material.icons.extended)
 
-    // Compose Debug/Test tools
+    // Compose Debug / Test tools
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
-    // Accompanist Pager
+    // Accompanist
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
+    implementation(libs.accompanist.permissions)
 
+    // -----------------------
     // Coroutines
+    // -----------------------
     implementation(libs.jetbrains.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    // Hilt (DI)
+    // -----------------------
+    // Dependency Injection (Hilt)
+    // -----------------------
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    // Communication
+    // -----------------------
+    // Networking
+    // -----------------------
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.kotlinx.serialization.json)
+
+    // -----------------------
+    // Communication / Nearby
+    // -----------------------
     implementation(libs.play.services.nearby)
 
-    // Permissions
-    implementation (libs.accompanist.permissions)
-
+    // -----------------------
     // Storage
-    implementation (libs.androidx.datastore.preferences)
+    // -----------------------
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-    // Animation
-    implementation (libs.android.lottie.compose)
+    // -----------------------
+    // Animation / UI
+    // -----------------------
+    implementation(libs.android.lottie.compose)
+    implementation(libs.coil.compose) // Image loading
 
-    // Api
-    implementation (libs.velaris.api.client)
+    // -----------------------
+    // Velaris API client
+    // -----------------------
+    implementation(libs.velaris.api.client)
 
+    // -----------------------
     // Testing
+    // -----------------------
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Retrofit
-    implementation(libs.retrofit2)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-
-    // OkHttp
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging.interceptor)
-
-    // Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    // Coil for image loading
-    implementation (libs.coil.compose)
 }

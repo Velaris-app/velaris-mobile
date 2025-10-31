@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.velaris.mobile.ui.common.CompactTopBar
 import com.velaris.mobile.ui.feature.common.stats.cards.PerformanceChartCard
+import com.velaris.mobile.ui.feature.insights.components.InsightsState
 import com.velaris.mobile.ui.feature.insights.components.cards.CategoryDistributionCard
 import com.velaris.mobile.ui.feature.insights.components.cards.CategoryTrendCard
 import com.velaris.mobile.ui.feature.insights.components.cards.PerformanceMetricsCard
@@ -22,13 +23,12 @@ import com.velaris.mobile.ui.feature.insights.components.cards.TopPerformersCard
 import com.velaris.mobile.ui.feature.insights.components.cards.TrendDiffCard
 import com.velaris.mobile.ui.feature.insights.components.filter.FilterSection
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InsightsScreen(
     viewModel: InsightsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    var showFilters by remember { mutableStateOf(true) }
+    var showFilters by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -45,7 +45,7 @@ fun InsightsScreen(
             )
         }
     ) { padding ->
-    Column(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -61,34 +61,37 @@ fun InsightsScreen(
                 )
             }
 
-            if (state.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) { CircularProgressIndicator() }
                 }
-            } else if (state.error != null) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(state.error!!)
+                state.error != null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) { Text(state.error!!) }
                 }
-            } else {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    PerformanceChartCard(performanceData = state.trendStats)
-                    CategoryDistributionCard(categoryDistribution = state.categoryStats)
-                    PerformanceMetricsCard(overview = state.overviewStats)
-                    TopPerformersCard(topPerformers = state.topMoversStats)
-                    TrendDiffCard(trendDiff = state.trendDiffStats)
-                    CategoryTrendCard(categoryTrend = state.categoryTrendStats)
-                    TagsStatsCard(tags = state.tagStats)
-                }
+                else -> InsightsCards(state)
             }
         }
+    }
+}
+
+@Composable
+private fun InsightsCards(state: InsightsState) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        PerformanceChartCard(performanceData = state.trendStats)
+        CategoryDistributionCard(categoryDistribution = state.categoryStats)
+        PerformanceMetricsCard(overview = state.overviewStats)
+        TopPerformersCard(topPerformers = state.topMoversStats)
+        TrendDiffCard(trendDiff = state.trendDiffStats)
+        CategoryTrendCard(categoryTrend = state.categoryTrendStats)
+        TagsStatsCard(tags = state.tagStats)
     }
 }

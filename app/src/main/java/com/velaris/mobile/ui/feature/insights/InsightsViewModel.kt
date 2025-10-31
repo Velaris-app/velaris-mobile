@@ -2,15 +2,18 @@ package com.velaris.mobile.ui.feature.insights
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.velaris.api.client.model.*
 import com.velaris.mobile.data.repository.StatsRepository
+import com.velaris.mobile.data.util.ApiResult
+import com.velaris.mobile.data.util.ErrorMapper
 import com.velaris.mobile.ui.feature.insights.components.InsightsState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class InsightsViewModel @Inject constructor(
@@ -32,37 +35,86 @@ class InsightsViewModel @Inject constructor(
     private fun loadAllStats() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            try {
-                val categoryStats = statsRepository.getCategoryStats()
-                val trendStats = statsRepository.getTrendStats()
-                val overviewStats = statsRepository.getOverviewStats()
-                val tagStats = statsRepository.getTagStats()
-                val trendDiffStats = statsRepository.getTrendDiffStats()
-                val topMoversStats = statsRepository.getTopMovers()
 
-                val selectedCategories = _state.value.selectedCategories.ifEmpty {
-                    categoryStats.map { it.categoryName }.toSet()
-                }
+            val categoryStats = statsRepository.getCategoryStats()
+            val trendStats = statsRepository.getTrendStats(TrendRequest(period = Period.WEEK))
+            val overviewStats = statsRepository.getOverviewStats()
+            val tagStats = statsRepository.getTagStats()
+            val trendDiffStats = statsRepository.getTrendDiffStats()
+            val topMoversStats = statsRepository.getTopMovers(
+                SearchFilter(
+                    paginationRequest = PaginationRequest(page = 1, propertySize = 10),
+                    sortRequest = SortRequest(sortBy = "name", sortDirection = SortDirection.DESC)
+                )
+            )
 
-                val categoryTrendStats = selectedCategories.flatMap { category ->
-                    statsRepository.getCategoryTrend(category)
-                }
+            val errorResult = listOf(
+                categoryStats,
+                trendStats,
+                overviewStats,
+                tagStats,
+                trendDiffStats,
+                topMoversStats
+            ).filterIsInstance<ApiResult.Error>().firstOrNull()
 
+            if (errorResult != null) {
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        categoryStats = categoryStats,
-                        trendStats = trendStats,
-                        overviewStats = overviewStats,
-                        tagStats = tagStats,
-                        trendDiffStats = trendDiffStats,
-                        topMoversStats = topMoversStats,
-                        categoryTrendStats = categoryTrendStats,
-                        error = null
+                        error = ErrorMapper.toUserMessage(errorResult.code, errorResult.message)
                     )
                 }
-            } catch (e: Exception) {
-                _state.update { it.copy(isLoading = false, error = e.message ?: "Unknown error") }
+                return@launch
+            }
+
+            val categoryData = (categoryStats as? ApiResult.Success)?.data.orEmpty()
+            val trendData = (trendStats as? ApiResult.Success)?.data.orEmpty()
+            val overviewData = (overviewStats as? ApiResult.Success)?.data
+            val tagData = (tagStats as? ApiResult.Success)?.data.orEmpty()
+            val trendDiffData = (trendDiffStats as? ApiResult.Success)?.data.orEmpty()
+            val topMoversData = (topMoversStats as? ApiResult.Success)?.data.orEmpty()
+
+            val selectedCategories = _state.value.selectedCategories.ifEmpty {
+                categoryData.map { it.categoryName }.toSet()
+            }
+
+            // Pobieranie trendów dla wybranych kategorii
+            val categoryTrendResults = selectedCategories.map { category ->
+                statsRepository.getCategoryTrend(
+                    CategoryTrendRequest(
+                        category = category,
+                        period = Period.WEEK
+                    )
+                )
+            }
+
+            val categoryTrendError = categoryTrendResults.filterIsInstance<ApiResult.Error>().firstOrNull()
+            if (categoryTrendError != null) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = ErrorMapper.toUserMessage(categoryTrendError.code, categoryTrendError.message)
+                    )
+                }
+                return@launch
+            }
+
+            val categoryTrendData = categoryTrendResults.mapNotNull { result ->
+                (result as? ApiResult.Success)?.data
+            }.flatten()
+
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    categoryStats = categoryData,
+                    trendStats = trendData,
+                    overviewStats = overviewData,
+                    tagStats = tagData,
+                    trendDiffStats = trendDiffData,
+                    topMoversStats = topMoversData,
+                    categoryTrendStats = categoryTrendData,
+                    error = null
+                )
             }
         }
     }

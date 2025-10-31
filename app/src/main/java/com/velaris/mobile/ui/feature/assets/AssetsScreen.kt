@@ -1,6 +1,5 @@
 package com.velaris.mobile.ui.feature.assets
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -16,7 +15,6 @@ import com.velaris.mobile.ui.feature.assets.components.states.ErrorBanner
 import com.velaris.mobile.ui.feature.assets.components.states.LoadingState
 import com.velaris.mobile.ui.navigation.Routes
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AssetsScreen(
     viewModel: AssetsViewModel,

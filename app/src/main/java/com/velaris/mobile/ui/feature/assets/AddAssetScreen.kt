@@ -14,9 +14,9 @@ import androidx.navigation.NavController
 import com.velaris.api.client.model.Asset
 import com.velaris.mobile.ui.feature.assets.components.cards.BasicInfoCard
 import com.velaris.mobile.ui.feature.assets.components.cards.PriceConditionCard
+import com.velaris.mobile.ui.feature.assets.components.cards.PriceConditionState
 import com.velaris.mobile.ui.feature.assets.components.cards.QuantityTagsCard
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAssetScreen(viewModel: AssetsViewModel, navController: NavController) {
     val loading by viewModel.loading.collectAsState()
@@ -52,10 +52,16 @@ fun AddAssetScreen(viewModel: AssetsViewModel, navController: NavController) {
             )
 
             PriceConditionCard(
-                price = price, onPriceChange = { price = it },
-                currency = currency, onCurrencyChange = { currency = it },
-                condition = condition, onConditionChange = { condition = it },
-                year = year, onYearChange = { year = it }
+                state = PriceConditionState(
+                    price = price,
+                    onPriceChange = { price = it },
+                    currency = currency,
+                    onCurrencyChange = { currency = it },
+                    condition = condition,
+                    onConditionChange = { condition = it },
+                    year = year,
+                    onYearChange = { year = it }
+                )
             )
 
             QuantityTagsCard(

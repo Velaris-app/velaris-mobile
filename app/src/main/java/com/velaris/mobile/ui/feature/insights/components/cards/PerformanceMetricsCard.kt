@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.velaris.mobile.domain.model.OverviewStats
+import com.velaris.mobile.util.formatNumber
 
 @Composable
 fun PerformanceMetricsCard(
@@ -24,7 +25,7 @@ fun PerformanceMetricsCard(
             .shadow(6.dp, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
@@ -54,26 +55,19 @@ fun PerformanceMetricsCard(
                 }
             } else {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     MetricItem(
                         label = "Total Value",
-                        value = "${overview.totalValue} ${overview.currency}",
+                        value = formatNumber(overview.totalValue) + " " + overview.currency,
                         color = MaterialTheme.colorScheme.primary
                     )
                     MetricItem(
                         label = "Total Assets",
-                        value = overview.totalAssets.toString(),
+                        value = formatNumber(overview.totalAssets.toBigDecimal()),
                         color = MaterialTheme.colorScheme.secondary
-                    )
-                    MetricItem(
-                        label = "Total Items",
-                        value = overview.totalItems.toString(),
-                        color = MaterialTheme.colorScheme.tertiary
                     )
                 }
             }
@@ -91,10 +85,10 @@ private fun MetricItem(
         Box(
             modifier = Modifier
                 .background(
-                    color = color.copy(alpha = 0.15f),
+                    color = color.copy(alpha = 0.1f),
                     shape = RoundedCornerShape(12.dp)
                 )
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
             Text(
                 text = value,
@@ -113,3 +107,5 @@ private fun MetricItem(
         )
     }
 }
+
+private fun Double.format(digits: Int) = "%.${digits}f".format(this)

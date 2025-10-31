@@ -6,9 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.velaris.mobile.domain.model.TrendStats
-import com.velaris.mobile.ui.common.ChartPoint
-import com.velaris.mobile.ui.common.LineChart
-import java.math.BigDecimal
+import com.velaris.mobile.ui.common.charts.ChartPoint
+import com.velaris.mobile.ui.common.charts.LineChart
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -47,15 +46,22 @@ fun PerformanceChartCard(
         } catch (_: Exception) { "" }
     }
 
-    // labelki Y (B / M / K / liczba)
-    val yLabels = performanceData.map { stat ->
+    val minY = performanceData.minOfOrNull { it.value.toDouble() } ?: 0.0
+    val maxY = performanceData.maxOfOrNull { it.value.toDouble() } ?: 1.0
+
+    val ySteps = 4
+    val yLabels = (0..ySteps).map { i ->
+        val value = minY + (maxY - minY) * i / ySteps
         when {
-            stat.value >= BigDecimal("1000000000") -> "%.1fB".format(stat.value.divide(BigDecimal("1000000000")).toDouble())
-            stat.value >= BigDecimal("1000000") -> "%.1fM".format(stat.value.divide(BigDecimal("1000000")).toDouble())
-            stat.value >= BigDecimal("1000") -> "%.1fK".format(stat.value.divide(BigDecimal("1000")).toDouble())
-            else -> "%.0f".format(stat.value.toDouble())
+            value >= 1_000_000_000 -> "%.1fB".format(value / 1_000_000_000)
+            value >= 1_000_000 -> "%.1fM".format(value / 1_000_000)
+            value >= 1_000 -> "%.1fK".format(value / 1_000)
+            else -> "%.0f".format(value)
         }
-    }
+    }.toMutableList()
+
+    // wymuszenie 0 na dole
+    yLabels[0] = "0"
 
     Card(
         modifier = modifier.fillMaxWidth(),

@@ -2,15 +2,16 @@ package com.velaris.mobile.ui.feature.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.velaris.mobile.di.TokenProvider
 import com.velaris.api.client.AuthApi
-import com.velaris.api.client.model.LoginRequest
+import com.velaris.api.client.model.GrantType
+import com.velaris.api.client.model.TokenRequest
 import com.velaris.api.client.model.RegisterRequest
+import com.velaris.mobile.di.TokenProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
@@ -21,14 +22,21 @@ class AuthViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
 
-    fun login(email: String, password: String, onSuccess: () -> Unit) = viewModelScope.launch {
+    fun login(username: String, password: String, onSuccess: () -> Unit) = viewModelScope.launch {
         try {
-            val response = authApi.login(LoginRequest(email, password))
+            val response = authApi.getToken(
+                TokenRequest(
+                    grantType = GrantType.PASSWORD,
+                    username = username,
+                    password = password
+                )
+            )
             if (response.isSuccessful) {
-                response.body()?.token?.let {
-                    tokenProvider.saveToken(it)
+                response.body()?.let { tokenResponse ->
+                    tokenProvider.saveAccessToken(tokenResponse.accessToken ?: "")
+                    tokenProvider.saveRefreshToken(tokenResponse.refreshToken ?: "")
                     onSuccess()
-                }
+                } ?: run { _error.value = "Empty response from server" }
             } else {
                 _error.value = "Login error: ${response.code()}"
             }
@@ -39,9 +47,12 @@ class AuthViewModel @Inject constructor(
 
     fun register(username: String, email: String, password: String, onSuccess: () -> Unit) = viewModelScope.launch {
         try {
-            val response = authApi.register(RegisterRequest(email, password, username))
-            if (response.isSuccessful) onSuccess()
-            else _error.value = "Register error ${response.code()}"
+            val response = authApi.registerUser(RegisterRequest(email = email, password = password, username = username))
+            if (response.isSuccessful) {
+                onSuccess()
+            } else {
+                _error.value = "Register error: ${response.code()}"
+            }
         } catch (e: Exception) {
             _error.value = e.message
         }

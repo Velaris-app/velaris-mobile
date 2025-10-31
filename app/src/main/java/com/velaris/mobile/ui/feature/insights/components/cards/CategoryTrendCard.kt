@@ -8,24 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontWeight
 import com.velaris.mobile.domain.model.CategoryTrendStats
+import com.velaris.mobile.util.formatNumber
+import java.math.BigDecimal
 
 @Composable
 fun CategoryTrendCard(
     categoryTrend: List<CategoryTrendStats>,
     modifier: Modifier = Modifier
 ) {
+    val maxValue = categoryTrend.maxOfOrNull { it.totalValue } ?: BigDecimal.ONE
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .shadow(6.dp, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
@@ -57,33 +60,51 @@ fun CategoryTrendCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+                        // Data label
                         Text(
                             text = item.createdDate.toLocalDate().toString(),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.onSurface
-                            )
+                            ),
+                            modifier = Modifier.width(100.dp)
                         )
+
+                        // Mini-bar proportional to max value
                         Box(
                             modifier = Modifier
+                                .weight(1f)
+                                .height(8.dp)
                                 .background(
-                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(12.dp)
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
+                                    shape = RoundedCornerShape(4.dp)
                                 )
-                                .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
-                            Text(
-                                text = "${item.totalValue} PLN",
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .fillMaxWidth((item.totalValue.toFloat() / maxValue.toFloat()))
+                                    .background(
+                                        MaterialTheme.colorScheme.primary,
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
                             )
                         }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        // Value label
+                        Text(
+                            text = formatNumber(item.totalValue) + " PLN",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        )
                     }
+
                     if (index != categoryTrend.lastIndex) {
                         HorizontalDivider(
                             modifier = Modifier

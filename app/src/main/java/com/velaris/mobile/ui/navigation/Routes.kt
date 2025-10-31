@@ -1,10 +1,6 @@
 package com.velaris.mobile.ui.navigation
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -15,7 +11,6 @@ import com.velaris.mobile.ui.feature.assets.AssetsScreen
 import com.velaris.mobile.ui.feature.assets.AssetsViewModel
 import com.velaris.mobile.ui.feature.auth.LoginScreen
 import com.velaris.mobile.ui.feature.auth.RegisterScreen
-import com.velaris.mobile.ui.feature.auth.SessionViewModel
 import com.velaris.mobile.ui.feature.insights.InsightsScreen
 import com.velaris.mobile.ui.feature.overview.OverviewScreen
 import com.velaris.mobile.ui.feature.settings.SettingsScreen
@@ -32,23 +27,17 @@ object Routes {
 
 
 @Composable
-@ExperimentalMaterial3Api
 fun AppNavHost(
     navController: NavHostController,
     darkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    startDestination: String
 ) {
-    val sessionViewModel: SessionViewModel = hiltViewModel()
-    val isLoggedIn by sessionViewModel.isLoggedIn.collectAsState()
-
-    LaunchedEffect(Unit) {
-        sessionViewModel.checkTokenValidity()
-    }
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn) Routes.OVERVIEW else Routes.LOGIN,
+        startDestination = startDestination,
         modifier = modifier
     ) {
         composable(Routes.LOGIN) {

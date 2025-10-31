@@ -1,8 +1,6 @@
 package com.velaris.mobile.domain.model
 
-import com.velaris.api.client.model.ActivityType
-import com.velaris.api.client.model.Asset
-import com.velaris.api.client.model.RecentActivitiesItem
+import com.velaris.api.client.model.*
 import java.math.BigDecimal
 import java.time.OffsetDateTime
 
@@ -23,9 +21,9 @@ data class AssetItem(
 )
 
 data class RecentActivity(
-    val assetId: Int,
+    val assetId: Long,
     val name: String,
-    val category: String,
+    val category: String?,
     val purchasePrice: BigDecimal,
     val quantity: Int,
     val createdAt: OffsetDateTime,
@@ -34,10 +32,12 @@ data class RecentActivity(
 )
 
 enum class ActivityTypeEnum {
-    CREATED, UPDATED
+    CREATED, UPDATED, DELETED
 }
 
-fun Asset.toDomain(): Asset = Asset(
+// Mapper DTO -> Domain
+
+fun Asset.toDomain(): AssetItem = AssetItem(
     id = id ?: 0L,
     name = name ?: "",
     category = category ?: "",
@@ -65,21 +65,22 @@ fun AssetItem.toApi(): Asset = Asset(
     quantity = quantity,
     images = images,
     tags = tags,
-    createdAt = createdAt,
-    updatedAt = updatedAt
+    createdAt = createdAt ?: OffsetDateTime.now(),
+    updatedAt = updatedAt ?: OffsetDateTime.now()
 )
 
 fun RecentActivitiesItem.toDomain(): RecentActivity = RecentActivity(
-    assetId = assetId ?: 0,
-    name = name ?: "",
-    category = category ?: "",
-    purchasePrice = purchasePrice ?: BigDecimal.ZERO,
-    quantity = quantity ?: 0,
-    createdAt = createdAt ?: OffsetDateTime.now(),
-    updatedAt = updatedAt ?: OffsetDateTime.now(),
+    assetId = assetId?.toLong() ?: 0L,
+    name = "",
+    category = null,
+    purchasePrice = BigDecimal.ZERO,
+    quantity = 0,
+    createdAt = changeDate,
+    updatedAt = changeDate,
     activityType = when (activityType) {
         ActivityType.CREATED -> ActivityTypeEnum.CREATED
         ActivityType.UPDATED -> ActivityTypeEnum.UPDATED
+        ActivityType.DELETED -> ActivityTypeEnum.DELETED
         else -> ActivityTypeEnum.UPDATED
     }
 )

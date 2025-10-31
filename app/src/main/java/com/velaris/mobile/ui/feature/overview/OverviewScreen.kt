@@ -3,11 +3,10 @@ package com.velaris.mobile.ui.feature.overview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,24 +19,29 @@ import com.velaris.mobile.ui.feature.overview.components.cards.PortfolioDistribu
 import com.velaris.mobile.ui.feature.overview.components.cards.RecentActivityCard
 import com.velaris.mobile.ui.feature.overview.components.cards.TotalValueCard
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
-    val state = viewModel.state.collectAsState().value
+    val state by viewModel.state.collectAsState()
 
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = state.isLoading,
-        onRefresh = {
-            viewModel.loadOverview()
-        }
-    )
+    val pullRefreshState = rememberPullToRefreshState()
 
     Scaffold(topBar = { CompactTopBar("Overview") }) { padding ->
-        Box(
+        PullToRefreshBox(
+            isRefreshing = state.isLoading,
+            onRefresh = { viewModel.loadOverview() },
+            state = pullRefreshState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .pullRefresh(pullRefreshState)
+                .padding(padding),
+            indicator = {
+                Indicator(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    isRefreshing = state.isLoading,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    state = pullRefreshState
+                )
+            },
         ) {
             Column(
                 modifier = Modifier
@@ -70,12 +74,6 @@ fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
                     modifier = Modifier.padding(16.dp)
                 )
             }
-
-            PullRefreshIndicator(
-                refreshing = state.isLoading,
-                state = pullRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
         }
     }
 }

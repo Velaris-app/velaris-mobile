@@ -16,6 +16,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.modules.SerializersModule
 import java.math.BigDecimal
 import java.time.OffsetDateTime
+import java.util.UUID
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,7 +24,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(tokenProvider: TokenProvider): AuthInterceptor =
+    fun provideAuthInterceptor(
+        tokenProvider: TokenProvider
+    ): AuthInterceptor =
         AuthInterceptor(tokenProvider)
 
     @Provides
@@ -40,12 +43,13 @@ object NetworkModule {
             serializersModule = SerializersModule {
                 contextual(BigDecimal::class, BigDecimalSerializer)
                 contextual(OffsetDateTime::class, OffsetDateTimeSerializer)
+                contextual(UUID::class, UUIDSerializer)
             }
             ignoreUnknownKeys = true
         }
 
         return Retrofit.Builder()
-            .baseUrl("https://cc4733e17d8b.ngrok-free.app/")
+            .baseUrl("https://67e7da18cc3a.ngrok-free.app/")
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()

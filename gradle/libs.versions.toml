@@ -5,6 +5,7 @@ accompanistPermissions = "0.37.3"
 agp = "8.10.1"
 coilCompose = "3.3.0"
 converterGson = "3.0.0"
+coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.7"
 hiltAndroid = "2.56.2"
 hiltNavigationCompose = "1.3.0"
@@ -17,7 +18,7 @@ espressoCore = "3.7.0"
 kotlinxSerializationJson = "1.9.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
-composeBom = "2025.10.00"
+composeBom = "2025.10.01"
 appcompat = "1.7.1"
 loggingInterceptor = "5.2.1"
 lottieComposeVersion = "6.6.6"
@@ -25,10 +26,10 @@ materialIconsExtended = "1.7.8"
 okhttp = "5.2.1"
 playServicesNearby = "19.3.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
-roomCompiler = "2.8.2"
-roomRuntime = "2.8.2"
-roomKtx = "2.8.2"
-velarisApiClient = "0.0.17"
+roomCompiler = "2.8.3"
+roomRuntime = "2.8.3"
+roomKtx = "2.8.3"
+velarisApiClient = "0.0.32"
 ycharts = "2.1.0"
 
 [libraries]
@@ -37,6 +38,7 @@ accompanist-pager = { module = "com.google.accompanist:accompanist-pager", versi
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 android-lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieComposeVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
