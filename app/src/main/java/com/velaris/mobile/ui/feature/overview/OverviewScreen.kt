@@ -12,20 +12,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.velaris.mobile.ui.common.CompactTopBar
 import com.velaris.mobile.ui.feature.common.stats.cards.PerformanceChartCard
 import com.velaris.mobile.ui.feature.overview.components.cards.InvestmentCategoriesCard
 import com.velaris.mobile.ui.feature.overview.components.cards.PortfolioDistributionCard
 import com.velaris.mobile.ui.feature.overview.components.cards.RecentActivityCard
 import com.velaris.mobile.ui.feature.overview.components.cards.TotalValueCard
+import com.velaris.mobile.ui.navigation.BottomBarNavigation
 
 @Composable
-fun OverviewScreen(viewModel: OverviewViewModel = hiltViewModel()) {
+fun OverviewScreen(
+    viewModel: OverviewViewModel = hiltViewModel(),
+    navController: NavController
+) {
     val state by viewModel.state.collectAsState()
 
     val pullRefreshState = rememberPullToRefreshState()
 
-    Scaffold(topBar = { CompactTopBar("Overview") }) { padding ->
+    Scaffold(
+        topBar = { CompactTopBar("Overview") },
+        bottomBar = { BottomBarNavigation(navController) }
+        ) { padding ->
         PullToRefreshBox(
             isRefreshing = state.isLoading,
             onRefresh = { viewModel.loadOverview() },

@@ -24,16 +24,17 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.Locale
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
 fun generateColorForLabel(label: String, alpha: Float = 1f): Color {
     val hash = label.hashCode()
-    val hue = (hash % 360).toFloat()
-    val saturation = 0.6f + ((hash % 40) / 100f)
-    val lightness = 0.5f + ((hash % 20) / 100f)
-    return Color.hsl(hue, saturation, lightness, alpha)
+    val hue = ((hash % 360) + 360) % 360f
+    val saturation = 0.6f + ((hash % 40 + 40) % 40) / 100f
+    val lightness = 0.5f + ((hash % 20 + 20) % 20) / 100f
+    return Color.hsl(hue, saturation.coerceIn(0f, 1f), lightness.coerceIn(0f, 1f), alpha)
 }
 
 @Composable
@@ -41,7 +42,7 @@ fun PieChart(
     values: List<Float>,
     labels: List<String>? = null,
     colors: List<Color>? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     if (values.isEmpty()) return
 
@@ -105,7 +106,7 @@ fun PieChart(
                 val textRadius = radius * 0.5f
                 val x = center.x + cos(rad) * textRadius
                 val y = center.y + sin(rad) * textRadius
-                val percentText = String.format("%.0f%%", value / total * 100)
+                val percentText = String.format(Locale.US, "%.0f%%", value / total * 100)
                 drawText(
                     textMeasurer,
                     AnnotatedString(percentText),
@@ -157,6 +158,6 @@ fun PieChartPreview() {
         Color(0xFF009688), Color(0xFFFFC107), Color(0xFF795548)
     )
     MaterialTheme {
-        PieChart(values = mockValues, labels = mockLabels, colors = mockColors)
+        PieChart(values = mockValues, labels = mockLabels, colors = mockColors, modifier = Modifier.size(300.dp))
     }
 }

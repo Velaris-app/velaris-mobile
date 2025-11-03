@@ -9,9 +9,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.velaris.mobile.domain.model.RecentActivity
 import com.velaris.mobile.domain.model.ActivityTypeEnum
-import java.text.NumberFormat
-import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Composable
 fun RecentActivityCard(
@@ -62,29 +61,25 @@ private fun RecentActivityRow(activity: RecentActivity) {
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = activity.name,
+                text = "Asset #${activity.assetId}",
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
                 color = MaterialTheme.colorScheme.onSurface
             )
+            if (!activity.changedFields.isNullOrEmpty()) {
+                Text(
+                    text = "Changed fields: ${activity.changedFields.keys.joinToString()}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             Text(
-                text = activity.category.toString(),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = activity.createdAt.format(DateTimeFormatter.ofPattern("MMM d, yyyy")),
+                text = activity.changeDate.format(DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.getDefault())),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
         Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = NumberFormat.getCurrencyInstance().format(activity.purchasePrice),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-
             val (text, color) = when (activity.activityType) {
                 ActivityTypeEnum.CREATED -> "Added" to MaterialTheme.colorScheme.primary
                 ActivityTypeEnum.UPDATED -> "Updated" to MaterialTheme.colorScheme.secondary

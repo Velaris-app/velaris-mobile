@@ -17,6 +17,7 @@ import com.velaris.mobile.ui.common.CompactTopBar
 import com.velaris.mobile.ui.common.SearchableDropdownMenu
 import com.velaris.mobile.ui.common.SectionCard
 import com.velaris.mobile.ui.feature.auth.SessionViewModel
+import com.velaris.mobile.ui.navigation.BottomBarNavigation
 import com.velaris.mobile.ui.navigation.Routes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,7 +34,8 @@ fun SettingsScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(
-        topBar = { CompactTopBar("Settings") }
+        topBar = { CompactTopBar("Settings") },
+        bottomBar = { BottomBarNavigation(navController) }
     ) { padding ->
         Column(
             modifier = Modifier

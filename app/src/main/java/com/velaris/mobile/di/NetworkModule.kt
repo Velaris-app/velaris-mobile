@@ -15,6 +15,7 @@ import retrofit2.Retrofit
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.modules.SerializersModule
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.util.UUID
 
@@ -44,12 +45,13 @@ object NetworkModule {
                 contextual(BigDecimal::class, BigDecimalSerializer)
                 contextual(OffsetDateTime::class, OffsetDateTimeSerializer)
                 contextual(UUID::class, UUIDSerializer)
+                contextual(LocalDate::class, LocalDateSerializer)
             }
             ignoreUnknownKeys = true
         }
 
         return Retrofit.Builder()
-            .baseUrl("https://67e7da18cc3a.ngrok-free.app/")
+            .baseUrl("https://957173a13d38.ngrok-free.app/")
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()

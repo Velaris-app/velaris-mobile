@@ -32,7 +32,7 @@ class InsightsViewModel @Inject constructor(
         loadAllStats()
     }
 
-    private fun loadAllStats() {
+    fun loadAllStats() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
@@ -43,8 +43,8 @@ class InsightsViewModel @Inject constructor(
             val trendDiffStats = statsRepository.getTrendDiffStats()
             val topMoversStats = statsRepository.getTopMovers(
                 SearchFilter(
-                    paginationRequest = PaginationRequest(page = 1, propertySize = 10),
-                    sortRequest = SortRequest(sortBy = "name", sortDirection = SortDirection.DESC)
+                    paginationRequest = PaginationRequest(page = 0, propertySize = 20),
+                    sortRequest = SortRequest(sortBy = "totalValue", sortDirection = SortDirection.DESC)
                 )
             )
 
@@ -78,7 +78,6 @@ class InsightsViewModel @Inject constructor(
                 categoryData.map { it.categoryName }.toSet()
             }
 
-            // Pobieranie trendów dla wybranych kategorii
             val categoryTrendResults = selectedCategories.map { category ->
                 statsRepository.getCategoryTrend(
                     CategoryTrendRequest(

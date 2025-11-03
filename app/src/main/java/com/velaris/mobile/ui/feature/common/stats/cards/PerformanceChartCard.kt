@@ -8,16 +8,14 @@ import androidx.compose.ui.unit.dp
 import com.velaris.mobile.domain.model.TrendStats
 import com.velaris.mobile.ui.common.charts.ChartPoint
 import com.velaris.mobile.ui.common.charts.LineChart
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun PerformanceChartCard(
     performanceData: List<TrendStats>,
     modifier: Modifier = Modifier
 ) {
-    val dateFormat = SimpleDateFormat("MM/dd", Locale.US)
+    val dateFormat = DateTimeFormatter.ofPattern("MM/dd")
 
     if (performanceData.isEmpty()) {
         Card(
@@ -42,7 +40,7 @@ fun PerformanceChartCard(
     // labelki X
     val xLabels = performanceData.map { stat ->
         try {
-            dateFormat.format(Date.from(stat.date.toInstant()))
+            dateFormat.format(stat.date)
         } catch (_: Exception) { "" }
     }
 

@@ -19,13 +19,19 @@ fun FilterSection(
 ) {
     SectionCard(
         title = "Filters",
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Text(
+                text = "Date Range",
+                style = MaterialTheme.typography.titleSmall
+            )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -33,26 +39,24 @@ fun FilterSection(
                 OutlinedTextField(
                     value = selectedDateRange.start.format(DateTimeFormatter.ISO_LOCAL_DATE),
                     onValueChange = {},
-                    label = { Text("Od") },
+                    label = { Text("From") },
                     modifier = Modifier.weight(1f),
                     enabled = false
                 )
                 OutlinedTextField(
                     value = selectedDateRange.end.format(DateTimeFormatter.ISO_LOCAL_DATE),
                     onValueChange = {},
-                    label = { Text("Do") },
+                    label = { Text("To") },
                     modifier = Modifier.weight(1f),
                     enabled = false
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = "Categories",
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(bottom = 8.dp)
+                style = MaterialTheme.typography.titleSmall
             )
+
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -62,10 +66,7 @@ fun FilterSection(
                     FilterChip(
                         selected = category in selectedCategories,
                         onClick = {
-                            val newSelection = selectedCategories.toMutableSet()
-                            if (category in selectedCategories) newSelection.remove(category)
-                            else newSelection.add(category)
-                            onCategoriesChange(newSelection)
+                            onCategoriesChange(selectedCategories)
                         },
                         label = { Text(category) }
                     )

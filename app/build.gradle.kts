@@ -122,6 +122,11 @@ dependencies {
     // -----------------------
     implementation(libs.android.lottie.compose)
     implementation(libs.coil.compose) // Image loading
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.gif)
+    implementation(libs.coil.svg)
+    implementation(libs.coil.video)
+
 
     // -----------------------
     // Velaris API client

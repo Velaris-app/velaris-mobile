@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 🚀 Internet access required for Coil / API calls -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".VelarisApplication"
@@ -14,8 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VelarisTheme"
         tools:targetApi="31"
-        android:networkSecurityConfig="@xml/network_security_config"
-        >
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <activity
             android:name=".MainActivity"
@@ -26,5 +27,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

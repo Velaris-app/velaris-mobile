@@ -22,7 +22,7 @@ class AssetRepository @Inject constructor(
                 list.map { it.toDomain() }
             }
 
-    suspend fun getAsset(id: String): ApiResult<AssetItem> =
+    suspend fun getAsset(id: Long): ApiResult<AssetItem> =
         safeApiCall { api.getAsset(id) }
             .mapSuccess { it.toDomain() }
 
@@ -30,7 +30,7 @@ class AssetRepository @Inject constructor(
         safeApiCall { api.addAsset(asset.toApi()) }
             .mapSuccess { it.toDomain() }
 
-    suspend fun updateAsset(id: String, asset: AssetItem): ApiResult<AssetItem> =
+    suspend fun updateAsset(id: Long, asset: AssetItem): ApiResult<AssetItem> =
         safeApiCall { api.modifyAsset(id, asset.toApi()) }
             .mapSuccess { it.toDomain() }
 

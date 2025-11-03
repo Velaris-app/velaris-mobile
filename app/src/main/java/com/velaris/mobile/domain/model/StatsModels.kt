@@ -2,6 +2,7 @@ package com.velaris.mobile.domain.model
 
 import com.velaris.api.client.model.*
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.OffsetDateTime
 
 data class CategoryStats(
@@ -13,7 +14,7 @@ data class CategoryStats(
 )
 
 data class TrendStats(
-    val date: OffsetDateTime,
+    val date: LocalDate,
     val value: BigDecimal,
     val itemsAdded: Int
 )
@@ -60,7 +61,7 @@ data class CategoryTrendStats(
 object StatsMapper {
 
     fun fromTrendItem(dto: TrendItem) = TrendStats(
-        date = dto.date ?: OffsetDateTime.MIN,
+        date = dto.date ?: LocalDate.MIN,
         value = dto.totalValue ?: BigDecimal.ZERO,
         itemsAdded = dto.itemsAdded ?: 0
     )

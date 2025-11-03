@@ -1,5 +1,6 @@
 package com.velaris.mobile.ui.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -34,11 +35,10 @@ fun AppNavHost(
     modifier: Modifier,
     startDestination: String
 ) {
-
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         composable(Routes.LOGIN) {
             LoginScreen(
@@ -70,7 +70,7 @@ fun AppNavHost(
             )
         }
 
-        composable(Routes.OVERVIEW) { OverviewScreen() }
+        composable(Routes.OVERVIEW) { OverviewScreen(navController = navController) }
 
         composable(Routes.ASSETS) {
             val viewModel = hiltViewModel<AssetsViewModel>()
@@ -82,7 +82,7 @@ fun AppNavHost(
             AddAssetScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(Routes.INSIGHTS) { InsightsScreen() }
+        composable(Routes.INSIGHTS) { InsightsScreen(navController = navController) }
 
         composable(Routes.SETTINGS) {
             SettingsScreen(

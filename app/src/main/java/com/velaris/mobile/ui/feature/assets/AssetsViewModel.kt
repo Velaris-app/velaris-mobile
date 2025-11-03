@@ -24,6 +24,10 @@ class AssetsViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
+    init {
+        loadAssets()
+    }
+
     fun loadAssets() {
         viewModelScope.launch {
             _loading.value = true

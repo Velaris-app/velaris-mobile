@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,12 +14,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.velaris.mobile.ui.feature.auth.SessionState
 import com.velaris.mobile.ui.feature.auth.SessionViewModel
 import com.velaris.mobile.ui.navigation.AppNavHost
-import com.velaris.mobile.ui.navigation.BottomBarNavigation
 import com.velaris.mobile.ui.navigation.Routes
 import com.velaris.mobile.ui.theme.VelarisTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,26 +52,18 @@ fun VelarisApp(sessionViewModel: SessionViewModel) {
 
     if (sessionState == SessionState.Loading) return
 
+    val startDestination = when (sessionState) {
+        SessionState.LoggedIn -> Routes.OVERVIEW
+        else -> Routes.LOGIN
+    }
+
     VelarisTheme(darkTheme = darkTheme) {
-        Scaffold(
-            bottomBar = {
-                val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-                val showBottomBar = currentRoute in listOf(
-                    Routes.OVERVIEW, Routes.ASSETS, Routes.INSIGHTS, Routes.SETTINGS, Routes.ADD_ASSET
-                )
-                if (showBottomBar) BottomBarNavigation(navController)
-            }
-        ) { padding ->
-            AppNavHost(
-                navController = navController,
-                modifier = Modifier.padding(padding),
-                darkTheme = darkTheme,
-                onThemeChange = { darkTheme = it },
-                startDestination = when (sessionState) {
-                    SessionState.LoggedIn -> Routes.OVERVIEW
-                    else -> Routes.LOGIN
-                }
-            )
-        }
+        AppNavHost(
+            navController = navController,
+            modifier = Modifier.fillMaxSize().systemBarsPadding() ,
+            darkTheme = darkTheme,
+            onThemeChange = { darkTheme = it },
+            startDestination = startDestination
+        )
     }
 }

@@ -15,19 +15,13 @@ data class AssetItem(
     val year: Int?,
     val quantity: Int,
     val images: List<String>,
-    val tags: List<String>,
-    val createdAt: OffsetDateTime?,
-    val updatedAt: OffsetDateTime?
+    val tags: List<String>
 )
 
 data class RecentActivity(
     val assetId: Long,
-    val name: String,
-    val category: String?,
-    val purchasePrice: BigDecimal,
-    val quantity: Int,
-    val createdAt: OffsetDateTime,
-    val updatedAt: OffsetDateTime,
+    val changeDate: OffsetDateTime,
+    val changedFields: Map<String, Any>? = null,
     val activityType: ActivityTypeEnum
 )
 
@@ -48,9 +42,7 @@ fun Asset.toDomain(): AssetItem = AssetItem(
     year = year,
     quantity = quantity ?: 1,
     images = images ?: emptyList(),
-    tags = tags ?: emptyList(),
-    createdAt = createdAt,
-    updatedAt = updatedAt
+    tags = tags ?: emptyList()
 )
 
 fun AssetItem.toApi(): Asset = Asset(
@@ -64,19 +56,13 @@ fun AssetItem.toApi(): Asset = Asset(
     year = year,
     quantity = quantity,
     images = images,
-    tags = tags,
-    createdAt = createdAt ?: OffsetDateTime.now(),
-    updatedAt = updatedAt ?: OffsetDateTime.now()
+    tags = tags
 )
 
 fun RecentActivitiesItem.toDomain(): RecentActivity = RecentActivity(
     assetId = assetId?.toLong() ?: 0L,
-    name = "",
-    category = null,
-    purchasePrice = BigDecimal.ZERO,
-    quantity = 0,
-    createdAt = changeDate,
-    updatedAt = changeDate,
+    changeDate = changeDate,
+    changedFields = changedFields,
     activityType = when (activityType) {
         ActivityType.CREATED -> ActivityTypeEnum.CREATED
         ActivityType.UPDATED -> ActivityTypeEnum.UPDATED
