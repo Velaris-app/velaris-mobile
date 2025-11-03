@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.time.OffsetDateTime
 
 data class AssetItem(
-    val id: Long,
+    val id: Long?,
     val name: String,
     val category: String,
     val description: String?,

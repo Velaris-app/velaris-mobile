@@ -2,6 +2,7 @@ package com.velaris.mobile.ui.feature.assets.components.cards
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,12 +16,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.velaris.mobile.ui.feature.assets.components.AssetImage
-import com.velaris.api.client.model.Asset
+import com.velaris.mobile.domain.model.AssetItem
 
 @Composable
 internal fun AssetCard(
-    asset: Asset,
+    asset: AssetItem,
     modifier: Modifier = Modifier,
+    onItemClick: () -> Unit = {},
     onDelete: () -> Unit
 ) {
     val shape = RoundedCornerShape(16.dp)
@@ -32,6 +34,7 @@ internal fun AssetCard(
             .clip(shape)
             .background(MaterialTheme.colorScheme.surface)
             .animateContentSize()
+            .clickable { onItemClick() }
     ) {
         Column(Modifier.fillMaxSize()) {
             Box(
@@ -50,13 +53,13 @@ internal fun AssetCard(
                     .padding(8.dp)
             ) {
                 Text(
-                    text = asset.name ?: "Unnamed",
+                    text = asset.name,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1
                 )
                 Text(
-                    text = asset.category ?: "Uncategorized",
+                    text = asset.category,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1
@@ -67,12 +70,12 @@ internal fun AssetCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Qty: ${asset.quantity ?: 0}",
+                        text = "Qty: ${asset.quantity}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = asset.purchasePrice?.toPlainString() ?: "-",
+                        text = asset.purchasePrice.toPlainString() ?: "-",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary
                     )

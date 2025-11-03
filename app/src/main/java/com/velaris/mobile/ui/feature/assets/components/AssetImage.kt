@@ -16,13 +16,13 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.velaris.api.client.model.Asset
 import com.velaris.mobile.R
+import com.velaris.mobile.domain.model.AssetItem
 
 @Composable
-internal fun AssetImage(asset: Asset) {
+internal fun AssetImage(asset: AssetItem) {
     val context = LocalContext.current
-    val imageUrl = remember(asset.images) { asset.images?.firstOrNull() }
+    val imageUrl = remember(asset.images) { asset.images.firstOrNull() }
 
     if (imageUrl != null) {
         AsyncImage(

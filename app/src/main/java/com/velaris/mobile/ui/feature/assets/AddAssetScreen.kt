@@ -11,11 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.velaris.api.client.model.Asset
+import com.velaris.mobile.domain.model.AssetItem
 import com.velaris.mobile.ui.feature.assets.components.cards.BasicInfoCard
 import com.velaris.mobile.ui.feature.assets.components.cards.PriceConditionCard
 import com.velaris.mobile.ui.feature.assets.components.cards.PriceConditionState
 import com.velaris.mobile.ui.feature.assets.components.cards.QuantityTagsCard
+import java.math.BigDecimal
 
 @Composable
 fun AddAssetScreen(viewModel: AssetsViewModel, navController: NavController) {
@@ -25,11 +26,11 @@ fun AddAssetScreen(viewModel: AssetsViewModel, navController: NavController) {
     var name by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf(BigDecimal.ZERO) }
     var currency by remember { mutableStateOf("USD") }
     var condition by remember { mutableStateOf("") }
     var year by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf("") }
+    var quantity by remember { mutableIntStateOf(0) }
     var tags by remember { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -85,15 +86,17 @@ fun AddAssetScreen(viewModel: AssetsViewModel, navController: NavController) {
 
             Button(
                 onClick = {
-                    val asset = Asset(
+                    val asset = AssetItem(
+                        id = null,
                         name = name,
                         category = category,
                         description = description,
-                        purchasePrice = price.toBigDecimalOrNull(),
+                        purchasePrice = price,
                         currency = currency,
                         condition = condition,
                         year = year.toIntOrNull(),
-                        quantity = quantity.toIntOrNull(),
+                        quantity = quantity,
+                        images = emptyList(),
                         tags = tags.split(",").map { it.trim() }.filter { it.isNotEmpty() }
                     )
                     viewModel.addAsset(asset) { navController.popBackStack() }

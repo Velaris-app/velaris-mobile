@@ -8,12 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.velaris.mobile.ui.feature.assets.components.cards.AssetCard
-import com.velaris.api.client.model.Asset
+import com.velaris.mobile.domain.model.AssetItem
 
 @Composable
 internal fun AssetsGrid(
-    assets: List<Asset>,
+    assets: List<AssetItem>,
     onDelete: (Long?) -> Unit,
+    onItemClick: (AssetItem?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -29,6 +30,7 @@ internal fun AssetsGrid(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f),
+                onItemClick = { onItemClick(asset) },
                 onDelete = { onDelete(asset.id) }
             )
         }

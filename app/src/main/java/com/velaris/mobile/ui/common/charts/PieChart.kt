@@ -24,7 +24,6 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.Locale
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -47,44 +46,34 @@ fun PieChart(
     if (values.isEmpty()) return
 
     val total = values.sum().takeIf { it != 0f } ?: 1f
-    val segmentColors = colors ?: labels?.map { generateColorForLabel(it) } ?: List(values.size) {
-        generateColorForLabel("Segment $it")
-    }
+    val segmentColors = colors ?: labels?.map { generateColorForLabel(it) } ?: List(values.size) { Color.Gray }
 
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     var progress by remember { mutableFloatStateOf(0f) }
-    val animatedProgress by animateFloatAsState(
-        targetValue = progress,
-        animationSpec = tween(durationMillis = 1500)
-    )
+    val animatedProgress by animateFloatAsState(targetValue = progress, animationSpec = tween(1500))
     LaunchedEffect(Unit) { progress = 1f }
 
     val textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
     val textMeasurer = rememberTextMeasurer()
 
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
-        Canvas(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .pointerInput(Unit) {
-                    detectTapGestures { tap ->
-                        val center = Offset(size.width / 2f, size.height / 2f)
-                        val dx = tap.x - center.x
-                        val dy = tap.y - center.y
-                        val angle = ((Math.toDegrees(atan2(dy, dx).toDouble()) + 360) % 360).toFloat()
-                        var startAngle = 0f
-                        values.forEachIndexed { i, value ->
-                            val sweep = value / total * 360f
-                            if (angle in startAngle..(startAngle + sweep)) {
-                                selectedIndex = if (selectedIndex == i) null else i
-                                return@detectTapGestures
-                            }
-                            startAngle += sweep
-                        }
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Canvas(modifier = Modifier.fillMaxWidth().weight(1f).pointerInput(Unit) {
+            detectTapGestures { tap ->
+                val center = Offset(size.width / 2f, size.height / 2f)
+                val dx = tap.x - center.x
+                val dy = tap.y - center.y
+                val angle = (Math.toDegrees(atan2(dy, dx).toDouble()) + 360) % 360
+                var startAngle = 0.0
+                values.forEachIndexed { i, value ->
+                    val sweep = value / total * 360.0
+                    if (angle in startAngle..(startAngle + sweep)) {
+                        selectedIndex = if (selectedIndex == i) null else i
+                        return@detectTapGestures
                     }
+                    startAngle += sweep
                 }
-        ) {
+            }
+        }) {
             val center = Offset(size.width / 2f, size.height / 2f)
             val radius = size.minDimension / 2f * 0.8f
             var startAngle = -90f
@@ -100,19 +89,19 @@ fun PieChart(
                     size = Size(radius * 2, radius * 2)
                 )
 
-                // procent w środku segmentu
-                val middleAngle = startAngle + sweepAngle / 2f
-                val rad = Math.toRadians(middleAngle.toDouble())
-                val textRadius = radius * 0.5f
-                val x = center.x + cos(rad) * textRadius
-                val y = center.y + sin(rad) * textRadius
-                val percentText = String.format(Locale.US, "%.0f%%", value / total * 100)
-                drawText(
-                    textMeasurer,
-                    AnnotatedString(percentText),
-                    topLeft = Offset(x.toFloat() - 10f, y.toFloat() - 10f),
-                    style = textStyle
-                )
+                // procent w środku segmentu, tylko jeśli segment wystarczająco duży
+                if (sweepAngle > 20f) {
+                    val middleAngle = startAngle + sweepAngle / 2f
+                    val rad = Math.toRadians(middleAngle.toDouble())
+                    val x = center.x + cos(rad) * radius * 0.5f
+                    val y = center.y + sin(rad) * radius * 0.5f
+                    drawText(
+                        textMeasurer,
+                        AnnotatedString("${(value / total * 100).toInt()}%"),
+                        topLeft = Offset(x.toFloat() - 10f, y.toFloat() - 10f),
+                        style = textStyle
+                    )
+                }
 
                 startAngle += sweepAngle
             }
@@ -120,24 +109,16 @@ fun PieChart(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // przewijana legenda
-        val scrollState = rememberScrollState()
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(scrollState),
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             values.forEachIndexed { i, _ ->
                 val label = labels?.getOrNull(i) ?: "Segment $i"
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        Modifier
-                            .size(16.dp)
-                            .background(segmentColors[i])
-                    )
+                    Box(Modifier.size(16.dp).background(segmentColors[i]))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = label, style = textStyle)
+                    Text(label, style = textStyle)
                 }
             }
         }

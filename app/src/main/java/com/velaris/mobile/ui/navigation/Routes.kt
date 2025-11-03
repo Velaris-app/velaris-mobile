@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.velaris.mobile.ui.feature.assets.AddAssetScreen
 import com.velaris.mobile.ui.feature.assets.AssetsScreen
 import com.velaris.mobile.ui.feature.assets.AssetsViewModel
+import com.velaris.mobile.ui.feature.assets.EditAssetScreen
 import com.velaris.mobile.ui.feature.auth.LoginScreen
 import com.velaris.mobile.ui.feature.auth.RegisterScreen
 import com.velaris.mobile.ui.feature.insights.InsightsScreen
@@ -21,6 +22,7 @@ object Routes {
     const val REGISTER = "register"
     const val OVERVIEW = "overview"
     const val ADD_ASSET = "addAsset"
+    const val EDIT_ASSET = "editAsset"
     const val ASSETS = "assets"
     const val INSIGHTS = "insights"
     const val SETTINGS = "settings"
@@ -80,6 +82,16 @@ fun AppNavHost(
         composable(Routes.ADD_ASSET) {
             val viewModel = hiltViewModel<AssetsViewModel>()
             AddAssetScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable("${Routes.EDIT_ASSET}/{assetId}") { backStackEntry ->
+            val assetId = backStackEntry.arguments?.getString("assetId")!!.toLong()
+            val viewModel = hiltViewModel<AssetsViewModel>()
+            EditAssetScreen(
+                assetId = assetId,
+                viewModel = viewModel,
+                navController = navController
+            )
         }
 
         composable(Routes.INSIGHTS) { InsightsScreen(navController = navController) }

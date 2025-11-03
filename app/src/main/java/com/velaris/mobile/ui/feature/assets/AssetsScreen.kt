@@ -71,6 +71,9 @@ fun AssetsScreen(
 
                 else -> AssetsGrid(
                     assets = assets,
+                    onItemClick = { asset ->
+                        navController.navigate("${Routes.EDIT_ASSET}/${asset!!.id}")
+                    },
                     onDelete = { id -> id?.let { viewModel.deleteAsset(it) } },
                 )
             }
