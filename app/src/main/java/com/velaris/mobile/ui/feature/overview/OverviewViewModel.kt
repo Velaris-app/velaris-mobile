@@ -62,7 +62,6 @@ class OverviewViewModel @Inject constructor(
                 it.copy(
                     totalValue = overview?.totalValue ?: BigDecimal.ZERO,
                     currency = overview?.currency ?: "PLN",
-                    portfolioDistribution = categories,
                     performanceData = performance,
                     categories = categories,
                     recentActivities = recent,

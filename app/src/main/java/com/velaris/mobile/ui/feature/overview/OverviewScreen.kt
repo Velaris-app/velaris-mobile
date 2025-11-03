@@ -16,7 +16,6 @@ import androidx.navigation.NavController
 import com.velaris.mobile.ui.common.CompactTopBar
 import com.velaris.mobile.ui.feature.common.stats.cards.PerformanceChartCard
 import com.velaris.mobile.ui.feature.overview.components.cards.InvestmentCategoriesCard
-import com.velaris.mobile.ui.feature.overview.components.cards.PortfolioDistributionCard
 import com.velaris.mobile.ui.feature.overview.components.cards.RecentActivityCard
 import com.velaris.mobile.ui.feature.overview.components.cards.TotalValueCard
 import com.velaris.mobile.ui.navigation.BottomBarNavigation
@@ -60,11 +59,6 @@ fun OverviewScreen(
                     totalValue = state.totalValue,
                     currency = state.currency,
                     modifier = Modifier.padding(16.dp)
-                )
-
-                PortfolioDistributionCard(
-                    distribution = state.portfolioDistribution,
-                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
                 PerformanceChartCard(

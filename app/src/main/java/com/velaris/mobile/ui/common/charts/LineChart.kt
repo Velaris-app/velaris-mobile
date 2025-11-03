@@ -6,6 +6,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -26,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.absoluteValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 
 data class ChartPoint(val x: Float, val y: Float)
 
@@ -71,8 +75,7 @@ fun LineChart(
     Canvas(
         modifier = modifier
             .fillMaxWidth()
-            .height(220.dp)
-            .padding(8.dp)
+            .height(260.dp)
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     scaleX = (scaleX * zoom).coerceIn(1f, 5f)
@@ -95,10 +98,10 @@ fun LineChart(
         val width = size.width
         val height = size.height
         val leftPadding = 100f
-        val chartHeight = height - 60f
+        val chartHeight = height - 100f
         val chartWidth = width - leftPadding
         val gradient = Brush.verticalGradient(
-            colors = listOf(lineColor.copy(alpha = 0.4f), lineColor.copy(alpha = 0.05f))
+            colors = listOf(lineColor.copy(alpha = 0.2f), lineColor.copy(alpha = 0.05f))
         )
 
         if (showAxes) {
@@ -293,9 +296,39 @@ fun LineChartPreview() {
         ChartPoint(6f, 10f),
         ChartPoint(7f, 7f)
     )
+
+    val mockDates = listOf(
+        "01/01", "01/02", "01/03", "01/04", "01/05", "01/06", "01/07", "01/08"
+    )
+
     MaterialTheme {
-        Box(Modifier.fillMaxWidth().padding(16.dp)) {
-            LineChart(mockPoints)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(6.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            ) {
+                Column(
+
+                ) {
+                    Text(
+                        text = "Portfolio Performance",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    LineChart(
+                        points = mockPoints,
+                        xLabels = mockDates,
+                        yLabels = listOf("0", "2", "4", "6", "8", "10")
+                    )
+                }
+            }
         }
     }
 }

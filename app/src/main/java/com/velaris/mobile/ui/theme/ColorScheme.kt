@@ -4,52 +4,53 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-// --- Warm Blue / Gold palette ---
-val WarmBluePrimary = Color(0xFF2A3A5E)      // Deep warm navy
-val WarmGold = Color(0xFFD4A373)             // Warm gold accent
-val WarmCoral = Color(0xFFF28482)            // Soft coral
-val WarmBackgroundLight = Color(0xFFF9F7F4)  // Light beige/ivory
-val WarmBackgroundDark = Color(0xFF121212)   // True dark background
-val WarmSurfaceLight = Color(0xFFFFFFFF)     // Clean white
-val WarmSurfaceDark = Color(0xFF1E1E1E)      // Dark surface, neutral
-val WarmError = Color(0xFFD9534F)            // Error red
+// --- Primary / Accent Colors ---
+val VelarisPrimary = Color(0xFF1D2E5A)    // głęboki granat‑niebieski
+val VelarisAccentGold = Color(0xFFD9B56A) // złoto – akcent
+val VelarisAccentCoral = Color(0xFFF47C6B) // koralowy – drugi akcent
 
-// --- Text colors ---
-val OnLight = Color(0xFF1E1E1E)  // Dark text on light
-val OnDark = Color(0xFFE6E6E6)   // Light text on dark
+// --- Background / Surface Light ---
+val VelarisBackgroundLight = Color(0xFFFAF9F7)  // bardzo jasny beż/ivory
+val VelarisSurfaceLight = Color(0xFFFFFFFF)     // biel
 
-// --- Light Color Scheme ---
+// --- Background / Surface Dark ---
+val VelarisBackgroundDark = Color(0xFF121417)   // prawie czarny, lekko granatowy
+val VelarisSurfaceDark = Color(0xFF1E1F23)      // ciemna powierzchnia
+
+// --- Text Colors ---
+val VelarisOnLight = Color(0xFF202124)  // ciemny tekst na jasnym tle
+val VelarisOnDarkPrimary = Color(0xFFF5F5F5)  // prawie biały
+val VelarisOnDarkSecondary = Color(0xFFB0B0B0)
+
+// --- Error / Feedback ---
+val VelarisError = Color(0xFFD9534F)   // mocny czerwony‑róż
+
 val LightColorScheme = lightColorScheme(
-    primary = WarmBluePrimary,
+    primary = VelarisPrimary,
     onPrimary = Color.White,
-    secondary = WarmGold,
+    secondary = VelarisAccentGold,
     onSecondary = Color.White,
-    tertiary = WarmCoral,
+    tertiary = VelarisAccentCoral,
     onTertiary = Color.White,
-    background = WarmBackgroundLight,
-    onBackground = OnLight,
-    surface = WarmSurfaceLight,
-    onSurface = OnLight,
-    surfaceVariant = Color(0xFFF1EDE9),
-    onSurfaceVariant = Color(0xFF4A4A4A),
-    error = WarmError,
+    background = VelarisBackgroundLight,
+    onBackground = VelarisOnLight,
+    surface = VelarisSurfaceLight,
+    onSurface = VelarisOnLight,
+    error = VelarisError,
     onError = Color.White
 )
 
-// --- Dark Color Scheme ---
 val DarkColorScheme = darkColorScheme(
-    primary = WarmBluePrimary,
+    primary = VelarisPrimary,
     onPrimary = Color.White,
-    secondary = WarmGold,
-    onSecondary = Color.Black,          // lepszy kontrast na ciemnym tle
-    tertiary = WarmCoral,
-    onTertiary = Color.Black,           // kontrast dla ciemnego tła
-    background = WarmBackgroundDark,
-    onBackground = OnDark,
-    surface = WarmSurfaceDark,
-    onSurface = OnDark,
-    surfaceVariant = Color(0xFF2A2A2C), // lekko jaśniejsza od surface, dla karty/paneli
-    onSurfaceVariant = Color(0xFFD1D1D1),
-    error = WarmError,
+    secondary = VelarisAccentGold,
+    onSecondary = VelarisOnDarkSecondary,
+    tertiary = VelarisAccentCoral,
+    onTertiary = VelarisOnDarkSecondary,
+    background = VelarisBackgroundDark,
+    onBackground = VelarisOnDarkPrimary,
+    surface = VelarisSurfaceDark,
+    onSurface = VelarisOnDarkPrimary,
+    error = VelarisError,
     onError = Color.White
 )

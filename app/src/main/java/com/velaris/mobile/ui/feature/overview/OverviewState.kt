@@ -8,7 +8,6 @@ import java.math.BigDecimal
 data class OverviewState(
     val totalValue: BigDecimal = BigDecimal.ZERO,
     val currency: String = "PLN",
-    val portfolioDistribution: List<CategoryStats> = emptyList(),
     val performanceData: List<TrendStats> = emptyList(),
     val categories: List<CategoryStats> = emptyList(),
     val recentActivities: List<RecentActivity> = emptyList(),

@@ -47,7 +47,7 @@ fun PerformanceChartCard(
     val minY = performanceData.minOfOrNull { it.value.toDouble() } ?: 0.0
     val maxY = performanceData.maxOfOrNull { it.value.toDouble() } ?: 1.0
 
-    val ySteps = 4
+    val ySteps = 5
     val yLabels = (0..ySteps).map { i ->
         val value = minY + (maxY - minY) * i / ySteps
         when {
@@ -61,25 +61,33 @@ fun PerformanceChartCard(
     // wymuszenie 0 na dole
     yLabels[0] = "0"
 
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-            Text("Portfolio Value", style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(16.dp))
-
-            LineChart(
-                points = chartPoints,
+        Card(
+            modifier = modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(6.dp),
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(260.dp),
-                showAxes = true,
-                gridSteps = 4,
-                xLabels = xLabels, // nasze labelki X,
-                yLabels = yLabels  // nasze labelki Y
-            )
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Portfolio Performance",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+
+                LineChart(
+                    points = chartPoints,
+                    xLabels = xLabels, // nasze labelki X,
+                    yLabels = yLabels  // nasze labelki Y
+                )
+            }
         }
     }
 }
