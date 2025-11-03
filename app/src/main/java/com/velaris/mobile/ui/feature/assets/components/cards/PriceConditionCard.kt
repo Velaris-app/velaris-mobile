@@ -82,27 +82,6 @@ internal fun PriceConditionCard(
     }
 }
 
-@Composable
-private fun RowFields(fields: List<FieldData>) {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        fields.forEach { field ->
-            OutlinedTextField(
-                value = field.value,
-                onValueChange = { newValue ->
-                    if (field.isNumber) {
-                        newValue.toBigDecimalOrNull()?.let { field.onValueChange(it.toString()) }
-                    } else {
-                        field.onValueChange(newValue)
-                    }
-                },
-                label = { Text(field.label) },
-                modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(keyboardType = field.keyboardType ?: KeyboardType.Text)
-            )
-        }
-    }
-}
-
 private data class FieldData(
     val value: String,
     val onValueChange: (String) -> Unit,

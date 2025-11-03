@@ -1,4 +1,4 @@
-package com.velaris.mobile.di
+package com.velaris.mobile.core.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.velaris.api.client.AuthApi

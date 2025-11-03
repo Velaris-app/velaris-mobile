@@ -1,6 +1,5 @@
 package com.velaris.mobile.ui.feature.assets.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,10 +29,7 @@ internal fun AssetImage(asset: AssetItem) {
                 .data(imageUrl)
                 .crossfade(true)
                 .listener(
-                    onStart = { Log.d("Coil", "🔄 Loading asset image: $imageUrl") },
-                    onSuccess = { _, _ -> Log.i("Coil", "✅ Image loaded successfully: $imageUrl") },
-                    onError = { request, result ->
-                        Log.e("Coil", "❌ Image load error for ${request.data}: ${result.throwable}")
+                    onError = { _, result ->
                         result.throwable.printStackTrace()
                     }
                 )

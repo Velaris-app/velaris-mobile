@@ -11,7 +11,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.velaris.mobile.domain.model.TopMoversStats
-import com.velaris.mobile.util.formatNumber
+import com.velaris.mobile.core.util.formatNumber
 
 @Composable
 fun TopPerformersCard(
@@ -122,5 +122,3 @@ private fun TopPerformerRow(item: TopMoversStats, maxValue: Double) {
         )
     }
 }
-
-private fun Double.format(digits: Int) = "%.${digits}f".format(this)

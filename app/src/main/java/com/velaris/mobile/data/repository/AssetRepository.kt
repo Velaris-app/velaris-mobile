@@ -1,9 +1,9 @@
 package com.velaris.mobile.data.repository
 
 import com.velaris.api.client.AssetsApi
-import com.velaris.mobile.data.util.ApiResult
-import com.velaris.mobile.data.util.mapSuccess
-import com.velaris.mobile.data.util.safeApiCall
+import com.velaris.mobile.core.util.ApiResult
+import com.velaris.mobile.core.util.mapSuccess
+import com.velaris.mobile.core.util.safeApiCall
 import com.velaris.mobile.domain.model.AssetItem
 import com.velaris.mobile.domain.model.RecentActivity
 import com.velaris.mobile.domain.model.toApi

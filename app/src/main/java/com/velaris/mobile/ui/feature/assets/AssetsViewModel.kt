@@ -3,7 +3,7 @@ package com.velaris.mobile.ui.feature.assets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.velaris.mobile.data.repository.AssetRepository
-import com.velaris.mobile.data.util.ApiResult
+import com.velaris.mobile.core.util.ApiResult
 import com.velaris.mobile.domain.model.AssetItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

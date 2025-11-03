@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.velaris.api.client.model.*
 import com.velaris.mobile.data.repository.StatsRepository
-import com.velaris.mobile.data.util.ApiResult
-import com.velaris.mobile.data.util.ErrorMapper
+import com.velaris.mobile.core.util.ApiResult
+import com.velaris.mobile.core.util.ErrorMapper
 import com.velaris.mobile.ui.feature.insights.components.InsightsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

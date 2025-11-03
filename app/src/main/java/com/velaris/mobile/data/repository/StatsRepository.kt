@@ -4,7 +4,9 @@ import com.velaris.api.client.StatsApi
 import com.velaris.api.client.model.CategoryTrendRequest
 import com.velaris.api.client.model.SearchFilter
 import com.velaris.api.client.model.TrendRequest
-import com.velaris.mobile.data.util.*
+import com.velaris.mobile.core.util.ApiResult
+import com.velaris.mobile.core.util.mapSuccess
+import com.velaris.mobile.core.util.safeApiCall
 import com.velaris.mobile.domain.model.*
 import javax.inject.Inject
 import javax.inject.Singleton

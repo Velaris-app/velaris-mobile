@@ -1,4 +1,4 @@
-package com.velaris.mobile.data.util
+package com.velaris.mobile.core.util
 
 sealed class ApiResult<out T> {
     data class Success<T>(val data: T) : ApiResult<T>()

@@ -2,11 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
-    id("com.google.devtools.ksp")
-    id("kotlin-kapt")
+    alias(libs.plugins.ksp)
+    alias (libs.plugins.kotlin.kapt)
     alias(libs.plugins.dagger.hilt.android)
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {

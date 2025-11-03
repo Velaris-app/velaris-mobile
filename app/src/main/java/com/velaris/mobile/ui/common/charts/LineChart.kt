@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.absoluteValue
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import java.util.Locale
 
 data class ChartPoint(val x: Float, val y: Float)
 
@@ -225,7 +226,7 @@ private fun DrawScope.drawAxesAndGrid(
     for (i in 0..gridSteps) {
         val ratio = i / gridSteps.toFloat()
         val y = chartHeight - ratio * chartHeight
-        val value = yLabels?.getOrNull(i) ?: String.format("%.1f", minY + (maxY - minY) * ratio)
+        val value = yLabels?.getOrNull(i) ?: String.format(Locale.US, "%.1f", minY + (maxY - minY) * ratio)
 
         drawLine(
             axisColor.copy(alpha = 0.3f),

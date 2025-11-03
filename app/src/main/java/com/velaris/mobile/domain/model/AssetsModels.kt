@@ -67,6 +67,5 @@ fun RecentActivitiesItem.toDomain(): RecentActivity = RecentActivity(
         ActivityType.CREATED -> ActivityTypeEnum.CREATED
         ActivityType.UPDATED -> ActivityTypeEnum.UPDATED
         ActivityType.DELETED -> ActivityTypeEnum.DELETED
-        else -> ActivityTypeEnum.UPDATED
     }
 )

@@ -1,4 +1,8 @@
-package com.velaris.mobile.data.util
+package com.velaris.mobile.core.util
+
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 object ErrorMapper {
 
@@ -20,9 +24,9 @@ object ErrorMapper {
 
     fun fromException(e: Exception): String {
         return when (e) {
-            is java.net.UnknownHostException -> "No internet connection. Please check your network."
-            is java.net.SocketTimeoutException -> "Connection timed out. Please try again."
-            is java.net.ConnectException -> "Unable to connect to the server. Please try again."
+            is UnknownHostException -> "No internet connection. Please check your network."
+            is SocketTimeoutException -> "Connection timed out. Please try again."
+            is ConnectException -> "Unable to connect to the server. Please try again."
             else -> e.localizedMessage ?: "An unexpected error occurred."
         }
     }

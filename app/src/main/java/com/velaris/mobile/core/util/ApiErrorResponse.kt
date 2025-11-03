@@ -1,4 +1,4 @@
-package com.velaris.mobile.data.util
+package com.velaris.mobile.core.util
 
 import kotlinx.serialization.Serializable
 
