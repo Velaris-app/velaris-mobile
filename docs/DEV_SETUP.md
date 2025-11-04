@@ -23,7 +23,7 @@ Optional:
 ## 2. Cloning the Repository
 
 ```bash
-git clone https://github.com/your-org/velaris-mobile.git
+git clone https://github.com/Velaris-app/velaris-mobile.git
 cd velaris-mobile
 ```
 
