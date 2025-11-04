@@ -6,7 +6,7 @@ import com.velaris.api.client.AuthApi
 import com.velaris.api.client.model.GrantType
 import com.velaris.api.client.model.TokenRequest
 import com.velaris.api.client.model.RegisterRequest
-import com.velaris.mobile.core.di.TokenProvider
+import com.velaris.mobile.core.security.TokenProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

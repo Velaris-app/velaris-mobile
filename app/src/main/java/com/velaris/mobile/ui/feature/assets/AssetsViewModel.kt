@@ -3,7 +3,8 @@ package com.velaris.mobile.ui.feature.assets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.velaris.mobile.data.repository.AssetRepository
-import com.velaris.mobile.core.util.ApiResult
+import com.velaris.mobile.core.util.dataOrEmpty
+import com.velaris.mobile.core.util.dataOrNull
 import com.velaris.mobile.domain.model.AssetItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,47 +29,21 @@ class AssetsViewModel @Inject constructor(
     private val _selectedAsset = MutableStateFlow<AssetItem?>(null)
     val selectedAsset: StateFlow<AssetItem?> = _selectedAsset
 
-    init {
-        loadAssets()
+    init { loadAssets() }
+
+    fun loadAssets() = launchWithLoading {
+        _assets.value = repository.getAssets().dataOrEmpty()
     }
 
-    fun loadAssets() {
-        viewModelScope.launch {
-            _loading.value = true
-            _error.value = null
-            when (val result = repository.getAssets()) {
-                is ApiResult.Success -> _assets.value = result.data
-                is ApiResult.Error -> _error.value = result.message
-            }
-            _loading.value = false
-        }
+    fun getAssetById(id: Long) = launchWithLoading {
+        _selectedAsset.value = repository.getAsset(id).dataOrNull()
     }
 
-    fun getAssetById(id: Long) {
-        viewModelScope.launch {
-            _loading.value = true
-            _error.value = null
-            when (val result = repository.getAsset(id)) {
-                is ApiResult.Success -> _selectedAsset.value = result.data
-                is ApiResult.Error -> _error.value = result.message
-            }
-            _loading.value = false
-        }
-    }
-
-    fun addAsset(asset: AssetItem, onSuccess: () -> Unit) {
-        viewModelScope.launch {
-            _loading.value = true
-            _error.value = null
-            when (val result = repository.addAsset(asset)) {
-                is ApiResult.Success -> {
-                    _assets.value = _assets.value + result.data
-                    onSuccess()
-                }
-                is ApiResult.Error -> _error.value = result.message
-            }
-            _loading.value = false
-        }
+    fun addAsset(asset: AssetItem, onSuccess: () -> Unit) = launchWithLoading {
+        val added = repository.addAsset(asset).dataOrNull()
+            ?: throw Exception("No asset returned from API")
+        _assets.value = _assets.value + added
+        onSuccess()
     }
 
     fun updateAsset(asset: AssetItem, onSuccess: () -> Unit) {
@@ -76,30 +51,27 @@ class AssetsViewModel @Inject constructor(
             _error.value = "Asset ID is missing"
             return
         }
-
-        viewModelScope.launch {
-            _loading.value = true
-            _error.value = null
-            when (val result = repository.updateAsset(asset.id, asset)) {
-                is ApiResult.Success -> {
-                    val updated = result.data
-                    _assets.value = _assets.value.map { if (it.id == updated.id) updated else it }
-                    onSuccess()
-                }
-                is ApiResult.Error -> _error.value = result.message
-            }
-            _loading.value = false
+        launchWithLoading {
+            val updated = repository.updateAsset(asset.id, asset).dataOrNull()
+                ?: throw Exception("No asset returned from API")
+            _assets.value = _assets.value.map { if (it.id == updated.id) updated else it }
+            onSuccess()
         }
     }
 
-    fun deleteAsset(id: Long) {
-        viewModelScope.launch {
+    fun deleteAsset(id: Long) = launchWithLoading {
+        repository.deleteAsset(id)
+        _assets.value = _assets.value.filterNot { it.id == id }
+    }
+
+    private fun launchWithLoading(block: suspend () -> Unit) = viewModelScope.launch {
+        try {
             _loading.value = true
             _error.value = null
-            when (val result = repository.deleteAsset(id.toString())) {
-                is ApiResult.Success -> _assets.value = _assets.value.filterNot { it.id == id }
-                is ApiResult.Error -> _error.value = result.message
-            }
+            block()
+        } catch (e: Exception) {
+            _error.value = e.localizedMessage ?: "Unexpected error"
+        } finally {
             _loading.value = false
         }
     }

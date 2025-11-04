@@ -6,11 +6,11 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 
 data class CategoryStats(
-    val categoryName: String,       // DTO: CategoryItem.category
-    val itemCount: Int,             // DTO: CategoryItem.itemCount
-    val totalValue: BigDecimal,     // DTO: CategoryItem.totalValue
-    val uniqueAssets: Int,          // DTO: CategoryItem.uniqueAssets
-    val percentageOfTotal: Double   // DTO: CategoryItem.percentageOfTotal
+    val categoryName: String,
+    val itemCount: Int,
+    val totalValue: BigDecimal,
+    val uniqueAssets: Int,
+    val percentageOfTotal: Double
 )
 
 data class TrendStats(
@@ -20,46 +20,41 @@ data class TrendStats(
 )
 
 data class OverviewStats(
-    val totalAssets: Int,           // DTO: OverviewItem.assetCount
-    val totalItems: Int,            // DTO: OverviewItem.totalItems
-    val totalValue: BigDecimal,     // DTO: OverviewItem.totalValue
-    val currency: String            // DTO: OverviewItem.currency
+    val totalAssets: Int,
+    val totalItems: Int,
+    val totalValue: BigDecimal,
+    val currency: String
 )
-
 
 data class TagStats(
-    val tag: String,                // DTO: TagItem.tag
-    val assetsCount: Int,           // DTO: TagItem.assetsCount
-    val totalValue: BigDecimal      // DTO: TagItem.totalValue
+    val tag: String,
+    val assetsCount: Int,
+    val totalValue: BigDecimal
 )
-
 
 data class TrendDiffStats(
-    val date: OffsetDateTime,       // DTO: TrendDiffItem.date
-    val totalValue: BigDecimal,     // DTO: TrendDiffItem.totalValue
-    val deltaValue: BigDecimal,     // DTO: TrendDiffItem.deltaValue
-    val deltaPercent: Double        // DTO: TrendDiffItem.deltaPercent
+    val date: OffsetDateTime,
+    val totalValue: BigDecimal,
+    val deltaValue: BigDecimal,
+    val deltaPercent: Double
 )
-
 
 data class TopMoversStats(
-    val assetId: Long,              // opcjonalnie, jeśli API zwraca id
-    val name: String,               // DTO: TopHoldingItem.name
-    val category: String?,          // DTO: TopHoldingItem.category
-    val totalValue: BigDecimal,     // DTO: TopHoldingItem.totalValue
-    val deltaValue: BigDecimal      // dodatkowe pole np. różnica wartości
+    val assetId: Long,
+    val name: String,
+    val category: String?,
+    val totalValue: BigDecimal,
+    val deltaValue: BigDecimal
 )
 
-
 data class CategoryTrendStats(
-    val category: String,           // DTO: CategoryTrendItem.category
-    val createdDate: OffsetDateTime,// DTO: CategoryTrendItem.createdDate
-    val totalValue: BigDecimal      // DTO: CategoryTrendItem.totalValue
+    val category: String,
+    val createdDate: OffsetDateTime,
+    val totalValue: BigDecimal
 )
 
 
 object StatsMapper {
-
     fun fromTrendItem(dto: TrendItem) = TrendStats(
         date = dto.date ?: LocalDate.MIN,
         value = dto.totalValue ?: BigDecimal.ZERO,

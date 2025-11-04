@@ -29,8 +29,6 @@ enum class ActivityTypeEnum {
     CREATED, UPDATED, DELETED
 }
 
-// Mapper DTO -> Domain
-
 fun Asset.toDomain(): AssetItem = AssetItem(
     id = id ?: 0L,
     name = name ?: "",

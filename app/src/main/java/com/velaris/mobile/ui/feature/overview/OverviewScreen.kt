@@ -1,8 +1,7 @@
 package com.velaris.mobile.ui.feature.overview
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
@@ -50,31 +49,35 @@ fun OverviewScreen(
                 )
             },
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(16.dp)
             ) {
-                TotalValueCard(
-                    totalValue = state.totalValue,
-                    currency = state.currency,
-                    modifier = Modifier.padding(16.dp)
-                )
-
-                PerformanceChartCard(
-                    performanceData = state.performanceData,
-                    modifier = Modifier.padding(16.dp)
-                )
-
-                InvestmentCategoriesCard(
-                    categories = state.categories,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-
-                RecentActivityCard(
-                    activities = state.recentActivities,
-                    modifier = Modifier.padding(16.dp)
-                )
+                item {
+                    TotalValueCard(
+                        overviewStats = state.overviewStats,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                item {
+                    PerformanceChartCard(
+                        performanceData = state.performanceData,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                item {
+                    InvestmentCategoriesCard(
+                        categories = state.categories,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                item {
+                    RecentActivityCard(
+                        activities = state.recentActivities,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }

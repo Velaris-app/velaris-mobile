@@ -1,4 +1,4 @@
-package com.velaris.mobile.core.di
+package com.velaris.mobile.core.serialization
 
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.PrimitiveKind

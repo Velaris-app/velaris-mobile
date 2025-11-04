@@ -1,7 +1,11 @@
 package com.velaris.mobile.ui.feature.overview.components.cards
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -9,43 +13,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.velaris.mobile.domain.model.RecentActivity
 import com.velaris.mobile.domain.model.ActivityTypeEnum
+import com.velaris.mobile.ui.common.SectionCard
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
 fun RecentActivityCard(
     activities: List<RecentActivity>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    maxVisibleItems: Int = 5,
+    rowModifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+    SectionCard(title = "Recent Activity", modifier = modifier) {
+        if (activities.isEmpty()) {
             Text(
-                text = "Recent Activity",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                text = "No recent activity",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        } else {
+            val rowHeight = 80.dp
+            val maxHeight = rowHeight * maxVisibleItems
 
-            Spacer(Modifier.height(16.dp))
-
-            if (activities.isEmpty()) {
-                Text(
-                    text = "No recent activity",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            } else {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    activities.forEach { activity ->
-                        RecentActivityRow(activity)
-                        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
-                    }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = maxHeight)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                activities.forEach { activity ->
+                    RecentActivityRow(activity, modifier = rowModifier)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
                 }
             }
         }
@@ -53,9 +52,12 @@ fun RecentActivityCard(
 }
 
 @Composable
-private fun RecentActivityRow(activity: RecentActivity) {
+fun RecentActivityRow(
+    activity: RecentActivity,
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -73,24 +75,25 @@ private fun RecentActivityRow(activity: RecentActivity) {
                 )
             }
             Text(
-                text = activity.changeDate.format(DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.getDefault())),
+                text = activity.changeDate.format(
+                    DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.getDefault())
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
-        Column(horizontalAlignment = Alignment.End) {
-            val (text, color) = when (activity.activityType) {
-                ActivityTypeEnum.CREATED -> "Added" to MaterialTheme.colorScheme.primary
-                ActivityTypeEnum.UPDATED -> "Updated" to MaterialTheme.colorScheme.secondary
-                ActivityTypeEnum.DELETED -> "Removed" to MaterialTheme.colorScheme.error
-            }
-
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelSmall,
-                color = color
-            )
+        val (text, color) = when (activity.activityType) {
+            ActivityTypeEnum.CREATED -> "Added" to MaterialTheme.colorScheme.primary
+            ActivityTypeEnum.UPDATED -> "Updated" to MaterialTheme.colorScheme.secondary
+            ActivityTypeEnum.DELETED -> "Removed" to MaterialTheme.colorScheme.error
         }
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            color = color,
+            modifier = Modifier.align(Alignment.Top)
+        )
     }
 }

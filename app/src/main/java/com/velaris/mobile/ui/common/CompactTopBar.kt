@@ -33,9 +33,7 @@ fun CompactTopBar(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
             )
-            Row {
-                actions()
-            }
+            actions()
         }
     }
 }

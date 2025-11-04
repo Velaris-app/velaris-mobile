@@ -34,11 +34,12 @@ fun VelarisSnackbarHost(snackbarHostState: SnackbarHostState) {
 
 @Composable
 fun InlineError(
+    modifier: Modifier = Modifier,
     message: String,
     onRetry: (() -> Unit)? = null
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

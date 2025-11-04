@@ -13,6 +13,7 @@ import com.velaris.mobile.ui.feature.assets.AssetsViewModel
 import com.velaris.mobile.ui.feature.assets.EditAssetScreen
 import com.velaris.mobile.ui.feature.auth.LoginScreen
 import com.velaris.mobile.ui.feature.auth.RegisterScreen
+import com.velaris.mobile.ui.feature.auth.SessionViewModel
 import com.velaris.mobile.ui.feature.insights.InsightsScreen
 import com.velaris.mobile.ui.feature.overview.OverviewScreen
 import com.velaris.mobile.ui.feature.settings.SettingsScreen
@@ -97,10 +98,12 @@ fun AppNavHost(
         composable(Routes.INSIGHTS) { InsightsScreen(navController = navController) }
 
         composable(Routes.SETTINGS) {
+            val viewModel = hiltViewModel<SessionViewModel>()
             SettingsScreen(
                 isDarkTheme = darkTheme,
                 onThemeChange = onThemeChange,
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
     }

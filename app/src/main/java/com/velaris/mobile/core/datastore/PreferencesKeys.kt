@@ -1,4 +1,4 @@
-package com.velaris.mobile.core.di
+package com.velaris.mobile.core.datastore
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 

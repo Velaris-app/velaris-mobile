@@ -5,8 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.velaris.mobile.core.di.PreferencesKeys.CURRENCY_KEY
-import com.velaris.mobile.core.di.TokenProvider
+import com.velaris.mobile.core.datastore.PreferencesKeys.CURRENCY_KEY
+import com.velaris.mobile.core.security.TokenProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

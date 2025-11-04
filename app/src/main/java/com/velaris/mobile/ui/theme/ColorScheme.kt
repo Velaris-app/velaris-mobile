@@ -5,25 +5,25 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
 // --- Primary / Accent Colors ---
-val VelarisPrimary = Color(0xFF1D2E5A)    // głęboki granat‑niebieski
-val VelarisAccentGold = Color(0xFFD9B56A) // złoto – akcent
-val VelarisAccentCoral = Color(0xFFF47C6B) // koralowy – drugi akcent
+val VelarisPrimary = Color(0xFF1D2E5A)
+val VelarisAccentGold = Color(0xFFD9B56A)
+val VelarisAccentCoral = Color(0xFFF47C6B)
 
 // --- Background / Surface Light ---
-val VelarisBackgroundLight = Color(0xFFFAF9F7)  // bardzo jasny beż/ivory
-val VelarisSurfaceLight = Color(0xFFFFFFFF)     // biel
+val VelarisBackgroundLight = Color(0xFFFAF9F7)
+val VelarisSurfaceLight = Color(0xFFFFFFFF)
 
 // --- Background / Surface Dark ---
-val VelarisBackgroundDark = Color(0xFF121417)   // prawie czarny, lekko granatowy
-val VelarisSurfaceDark = Color(0xFF1E1F23)      // ciemna powierzchnia
+val VelarisBackgroundDark = Color(0xFF121417)
+val VelarisSurfaceDark = Color(0xFF1E1F23)
 
 // --- Text Colors ---
-val VelarisOnLight = Color(0xFF202124)  // ciemny tekst na jasnym tle
-val VelarisOnDarkPrimary = Color(0xFFF5F5F5)  // prawie biały
+val VelarisOnLight = Color(0xFF202124)
+val VelarisOnDarkPrimary = Color(0xFFF5F5F5)
 val VelarisOnDarkSecondary = Color(0xFFB0B0B0)
 
 // --- Error / Feedback ---
-val VelarisError = Color(0xFFD9534F)   // mocny czerwony‑róż
+val VelarisError = Color(0xFFD9534F)
 
 val LightColorScheme = lightColorScheme(
     primary = VelarisPrimary,

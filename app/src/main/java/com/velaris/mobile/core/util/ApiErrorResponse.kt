@@ -8,5 +8,5 @@ data class ApiErrorResponse(
     val status: Int? = null,
     val error: String? = null,
     val message: String? = null,
-    val details: String? = null
+    val details: Map<String, String>? = null
 )
